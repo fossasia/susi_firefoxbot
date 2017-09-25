@@ -51,7 +51,6 @@ body{
   margin-right: 12px;
   border: 1.1px solid #e0e0e0;
   border-radius: 14px;
-  font-family: Product Sans,sans-serif;
 }
 
 .message-box:after{
@@ -100,6 +99,7 @@ body{
   cursor: pointer;
   vertical-align: middle;
   border-radius: 50%;
+  margin-left: 6px;
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 }
 .input-area .input-button .material-icons{

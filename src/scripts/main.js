@@ -9,7 +9,6 @@ messageFormElement.addEventListener("submit", function (event) {
 });
 
 function handleMessageInputSubmit(){
-	event.preventDefault();
 	var message=inputMessageElement.value;
 	message=message.trim();
 	inputMessageElement.value="";
