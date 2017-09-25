@@ -1,4 +1,44 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+
 .container{
 	width: 300px;
 	height: 400px;
 }
+
+.top-bar{
+	background-color: #4285f4;
+	height: 12%;
+}
+
+.logo{
+	display: relative;
+	margin-left: 35%;
+	margin-top: 5%;
+	width: 30%;
+}
+
+.message-history{
+	background-color: #f5f4f6;
+	height: 76%;
+}
+
+.input-area{
+	background-color: #f5f4f6;
+	box-shadow: 0 -1px 4px 0 rgba(0,0,0,.12);
+	height: 12%;
+}
+
+.input-area .input-message{
+	background-color: #ffffff;
+	border:none;
+	width: 90%;
+	border-radius: 5px;
+	padding: 8px;
+	margin-top: 8px;
+	margin-left:8px;
+
+}
+
