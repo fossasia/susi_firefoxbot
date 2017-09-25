@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "SUSI Chatbot",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_popup": "chatbot.html",
+    "default_icon" : {
+          "16" : "icons/susi_icon.png"
+         },
+    "default_title" : "susi_ai"
+  },
+
+  "icons": {
+    "128": "icons/susi_icon.png",
+    "48": "icons/susi_icon.png",
+    "16": "icons/susi_icon.png"
+  },
+
+  "content_security_policy": "script-src 'self' https://api.susi.ai; object-src 'self'",
+  
+  "permissions":[
+    "http://*/*",
+    "https://*/*",
+    "http://ajax.googleapis.com/ajax/libs/jquery/"
+  ]
+}
