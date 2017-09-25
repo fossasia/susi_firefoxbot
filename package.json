@@ -1,0 +1,32 @@
+{
+  "name": "susi_firefoxbot",
+  "version": "1.0.0",
+  "description": "Firefox extension for SUSI Chat",
+  "devDependencies": {
+    "eslint": "^4.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tstreamDOTh/susi_firefoxbot.git"
+  },
+  "scripts": {
+    "test": "eslint .",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "susi_firefoxbot",
+    "susi firefox extension",
+    "fossasia",
+    "susi ai",
+    "sui"
+  ],
+  "author": "tstreamDOTh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tstreamDOTh/susi_firefoxbot/issues"
+  },
+  "homepage": "https://github.com/tstreamDOTh/susi_firefoxbot#readme",
+  "dependencies": {
+    "babel-eslint": "^7.2.3"
+  }
+}
