@@ -1,8 +1,11 @@
 body{
 	margin: 0;
 	padding: 0;
+	font-family: 'Lato', sans-serif;
 }
-
+*{
+	box-sizing: border-box;
+}
 .container{
 	width: 300px;
 	height: 400px;
@@ -22,23 +25,35 @@ body{
 
 .message-history{
 	background-color: #f5f4f6;
-	height: 76%;
+	height: 75%;
 }
 
 .input-area{
 	background-color: #f5f4f6;
 	box-shadow: 0 -1px 4px 0 rgba(0,0,0,.12);
-	height: 12%;
+	height: 13%;
 }
 
 .input-area .input-message{
 	background-color: #ffffff;
 	border:none;
-	width: 90%;
-	border-radius: 5px;
-	padding: 8px;
+	width: 80%;
+	display: inline-block;
+	border-radius: 8px;
+	padding:10px;
 	margin-top: 8px;
 	margin-left:8px;
-
 }
-
+.input-area .input-button{
+	background-color: inherit;
+	padding: 5px;
+	display: inline-block;
+	border: none;
+	cursor: pointer;
+	vertical-align: middle;
+	border-radius: 50%;
+	transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+}
+.input-area .input-button:hover{
+box-shadow: 0 3px 13px rgba(0,0,0,.3);
+}

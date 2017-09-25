@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
@@ -9,10 +11,13 @@
 		<img class="logo" src="images/susi_logo_white.png">
 	</section>
 	<section class="message-history">
-		
+
 	</section>
 	<section class="input-area">
-		<input class="input-message" type="text" placeholder="Type your message...">
+		<form id="queryForm">
+		<input class="input-message" name="text" autofocus type="text" placeholder="Type your message..." />
+		<button type="submit" class="input-button" name="submit"><i class="material-icons">&#xE163;</i></button>
+		</form>
 	</section>
 	</div>
 </body>

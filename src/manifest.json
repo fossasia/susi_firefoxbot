@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "SUSI Chatbot",
   "version": "1.0",
-
+  "description": "Firefox extension for the SUSI Chatbot",
   "browser_action": {
     "default_popup": "chatbot.html",
     "default_icon" : {
@@ -18,7 +18,7 @@
   },
 
   "content_security_policy": "script-src 'self' https://api.susi.ai; object-src 'self'",
-  
+
   "permissions":[
     "http://*/*",
     "https://*/*",
