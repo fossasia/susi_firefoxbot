@@ -29,7 +29,7 @@ $ cd src
 
 1. Clone this repository.
 2. Open `about:debugging` on mozzila firefox.
-3. Turn on developer mode if not already on.
+3. Enable add-on debugging.
 4. Load temporary-addon from `src` folder.
 5. You will see an icon on the firefox's toolbar.
 6. Click on the icon and start interacting with SUSI.
