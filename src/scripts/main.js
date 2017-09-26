@@ -35,6 +35,9 @@ function getCurrentTimeString() {
 	if(hours===12){
 		ampm="PM";
 	}
+	if(minutes<10){
+		minutes="0"+minutes;
+	}
 	time=hours+":"+minutes+" "+ampm;
 	return time;
 }
@@ -80,7 +83,7 @@ function fetchResponse(query) {
 				errorText: "Sorry! request could not be made"
 			};
 			var currentTimeString=getCurrentTimeString();
-			createSusiMessage(response, currentTimeString);        
+			createSusiMessage(response, currentTimeString);
 		},
 		success: function (data) {
 			if (query !== data.answers[0].data[0].query) {
@@ -99,4 +102,3 @@ function composeResponse(data){
 	/*need to work on different type of responses*/
 	return answer;
 }
-
