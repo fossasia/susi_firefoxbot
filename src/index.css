@@ -32,6 +32,12 @@ body{
 .message-container-my{
   text-align: right;
 }
+
+.message-container-susi{
+  text-align: left;
+}
+
+
 .message-box{
   position: relative;
   text-align: left;
@@ -53,13 +59,35 @@ body{
   border-radius: 14px;
 }
 
+.message-box-susi{
+  position: relative;
+  text-align: left;
+  min-width: 60px;
+  display: inline-block;
+  overflow-wrap: break-word;
+  background-color: #ffffff;
+  max-width: 90%;
+  font-size: 16px;
+  font-weight: 300;
+  vertical-align: middle;
+  line-height: 22px;
+  padding: 6px 10px;
+  margin: 4px;
+  border-radius: 8px;
+  margin-right: : auto;
+  margin-left: 12px;
+  border: 1.1px solid #ffffff;
+  border-radius: 14px;
+}
+
+
 .message-box:after{
   content: "";
   position: absolute;
   box-sizing: border-box;
   left: 100%;
   top: 40px;
-  -webkit-transform: rotate(-135deg);
+  -webkit-transform: rotate(135deg);
   -ms-transform: rotate(-135deg);
   transform: rotate(-135deg);
   border: 8px solid;
@@ -68,6 +96,25 @@ body{
   -ms-transform-origin: 0 0;
   transform-origin: 0 0;
 }
+
+.message-box-susi:before{
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  left: 0%;
+  top: 40px;
+  -webkit-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+  border: 8px solid;
+  background-color: #ffffff;
+  border-color: transparent transparent #ffffff #ffffff;
+  -webkit-transform-origin: 0 0;
+  -ms-transform-origin: 0 0;
+  transform-origin: 0 0;
+}
+
+
 .message-time{
   font-size: 10px;
   color: #90a4ae;

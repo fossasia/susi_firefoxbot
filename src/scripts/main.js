@@ -49,7 +49,54 @@ function createMyMessage(message,timeString){
 	</div>"
 	).appendTo(messagesHistoryElement);
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
+	fetchResponse(message);
 }
-function createSusiMessage(){
 
+
+function createSusiMessage(message,timeString){
+	$(
+		"<div class='message-container message-container-susi'> \
+		<div class='message-box-susi message-susi'> \
+		<div class='message-text'>"+message+"</div> \
+		<div class='message-time'>"+timeString+"</div> \
+		</div> \
+	</div>"
+	).appendTo(messagesHistoryElement);
+	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
 }
+
+
+function fetchResponse(query) {
+	$.ajax({
+		dataType: "jsonp",
+		type: "GET",
+		url: "https://api.susi.ai/susi/chat.json?timezoneOffset=-300&q=" + query,
+		error: function(xhr,textStatus,errorThrown) {
+			/*console.log(xhr);
+			console.log(textStatus);
+			console.log(errorThrown);*/
+			var response = {
+				error: true,
+				errorText: "Sorry! request could not be made"
+			};
+			var currentTimeString=getCurrentTimeString();
+			createSusiMessage(response, currentTimeString);        
+		},
+		success: function (data) {
+			if (query !== data.answers[0].data[0].query) {
+				return fetchResponse(query);
+			}
+			var response = composeResponse(data);
+			var currentTimeString=getCurrentTimeString();
+			createSusiMessage(response, currentTimeString);
+		}
+	});
+}
+
+
+function composeResponse(data){
+	var answer = data.answers[0].data[0].answer;
+	/*need to work on different type of responses*/
+	return answer;
+}
+
