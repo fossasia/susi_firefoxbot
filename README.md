@@ -1,2 +1,33 @@
 # susi_firefoxbot
+
 SUSI.AI Firefox Extension
+
+[![Build Status](https://travis-ci.org/tstreamDOTh/susi_firefoxbot.svg?branch=master)](https://travis-ci.org/tstreamDOTh/susi_firefoxbot)
+
+## Our Project Objectives
+
+The central objective of this project is to develop a firefox addon for interacting with SUSI AI chatbot using WebExtension APIs.
+
+### What is SUSI
+
+Susi is an artificial intelligence combining pattern matching, internet data, data flow principles and inference engine principles. It has reflection abilities and it will be able to remember the users input to produce deductions and a personalized feed-back. Its purpose is to explore the abilities of an artificial companion and to answer the remaining unanswered questions.
+
+### Why susi_firefoxbot
+
+We noticed that users don't want to open susi web chat everytime and would prefer to interact with SUSI while staying on the current tab. So, we figured that a web extension will solve this problem.
+
+## Installation
+
+```sh
+$ git clone https://github.com/tstreamDOTh/susi_firefoxbot
+$ cd susi_firefoxbot
+$ cd src
+```
+
+1. Clone this repository.
+2. Open `about:debugging` on mozzila firefox.
+3. Turn on developer mode if not already on.
+4. Load temporary-addon from `src` folder.
+5. You will see an icon on the firefox's toolbar.
+6. Click on the icon and start interacting with SUSI.
+
