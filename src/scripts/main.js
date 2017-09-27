@@ -102,3 +102,7 @@ function composeResponse(data){
 	/*need to work on different type of responses*/
 	return answer;
 }
+
+setTimeout(function(){
+	$("#inputMessage").focus();
+},500);
