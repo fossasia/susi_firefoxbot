@@ -151,6 +151,7 @@ body{
 }
 .input-area .input-button .material-icons{
   vertical-align: middle;
+  color: #4285f4;
 }
 .input-area .input-button:hover{
   box-shadow: 0 3px 13px rgba(0,0,0,.3);
