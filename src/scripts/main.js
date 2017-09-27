@@ -2,7 +2,7 @@
 var messageFormElement = document.getElementById("messageForm");
 var inputMessageElement = document.getElementById("inputMessage");
 var messagesHistoryElement = document.getElementById("messagesHistory");
-
+var messageCount=0;
 messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
@@ -17,7 +17,8 @@ function handleMessageInputSubmit(){
 	}
 	else{
 		var currentTimeString=getCurrentTimeString();
-		createMyMessage(message,currentTimeString);
+		var msgId=messageCount++;
+		createMyMessage(message,currentTimeString,msgId);
 	}
 
 }
@@ -42,9 +43,9 @@ function getCurrentTimeString() {
 	return time;
 }
 
-function createMyMessage(message,timeString){
+function createMyMessage(message,timeString,msgId){
 	$(
-		"<div class='message-container message-container-my'> \
+		"<div class='message-container message-container-my' id='myMessage"+msgId+"'> \
 		<div class='message-box message-my'> \
 		<div class='message-text'>"+message+"</div> \
 		<div class='message-time'>"+timeString+"</div> \
@@ -52,32 +53,45 @@ function createMyMessage(message,timeString){
 	</div>"
 	).appendTo(messagesHistoryElement);
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
-	fetchResponse(message);
+	fetchResponse(message,msgId);
 }
 
 
-function createSusiMessage(message,timeString){
-	$(
-		"<div class='message-container message-container-susi'> \
-		<div class='message-box-susi message-susi'> \
+function createSusiMessage(message,timeString,msgId_susi){
+	$("#susiMessage"+msgId_susi).html(
+		"<div class='message-box-susi message-susi'> \
 		<div class='message-text'>"+message+"</div> \
 		<div class='message-time'>"+timeString+"</div> \
-		</div> \
-	</div>"
-	).appendTo(messagesHistoryElement);
+	</div>");
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
 }
 
-
-function fetchResponse(query) {
+function showLoading(show,msgId_susi){
+	if(show){
+		// create loading with this msgId_susi
+		$(
+			"<div class='message-container message-container-susi' id='susiMessage"+msgId_susi+"'> \
+			<div class='message-box-susi message-susi'> \
+			<div class='message-text'><img src='images/loading.gif' class='loading' /></div> \
+			</div> \
+		</div>"
+		).appendTo(messagesHistoryElement);
+		messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
+	}
+	else{
+		// hide loading in this msgId_susi
+		$("#susiMessage"+msgId_susi).empty();
+	}
+}
+function fetchResponse(query,msgId) {
+	var msgId_susi=msgId;
+	showLoading(true, msgId_susi);
 	$.ajax({
 		dataType: "jsonp",
 		type: "GET",
 		url: "https://api.susi.ai/susi/chat.json?timezoneOffset=-300&q=" + query,
 		error: function(xhr,textStatus,errorThrown) {
-			/*console.log(xhr);
-			console.log(textStatus);
-			console.log(errorThrown);*/
+			showLoading(false,msgId_susi);
 			var response = {
 				error: true,
 				errorText: "Sorry! request could not be made"
@@ -86,12 +100,15 @@ function fetchResponse(query) {
 			createSusiMessage(response, currentTimeString);
 		},
 		success: function (data) {
+			showLoading(false,msgId_susi);
 			if (query !== data.answers[0].data[0].query) {
-				return fetchResponse(query);
+				// return fetchResponse(query,messageCount++);
+				// need to implement various type responses
 			}
 			var response = composeResponse(data);
 			var currentTimeString=getCurrentTimeString();
-			createSusiMessage(response, currentTimeString);
+			createSusiMessage(response, currentTimeString, msgId_susi);
+
 		}
 	});
 }
