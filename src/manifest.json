@@ -28,10 +28,6 @@
     
   },
 
-  "background_color":"#000000"
-  ,
-  "display":"standalone"
-  ,
 
   "content_security_policy": "script-src 'self' https://api.susi.ai; object-src 'self'",
 
