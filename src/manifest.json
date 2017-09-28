@@ -3,6 +3,11 @@
   "name": "SUSI Chatbot",
   "version": "1.0",
   "description": "Firefox extension for the SUSI Chatbot",
+  "applications": {
+      "gecko": {
+          "id": "tstream.h@outlook.com"
+      }
+  },
   "browser_action": {
     "default_popup": "chatbot.html",
     "default_icon" : "icons/susi_icon.svg",
@@ -33,6 +38,7 @@
   "permissions":[
     "http://*/*",
     "https://*/*",
-    "http://ajax.googleapis.com/ajax/libs/jquery/"
+    "http://ajax.googleapis.com/ajax/libs/jquery/",
+    "storage"
   ]
 }
