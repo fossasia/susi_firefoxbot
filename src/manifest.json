@@ -10,17 +10,24 @@
   },
   "browser_action": {
     "default_popup": "chatbot.html",
-    "default_icon" : {
-          "16" : "icons/susi_icon.png"
-         },
+    "default_icon" : "icons/susi_icon.svg",
     "default_title" : "susi_ai"
   },
 
   "icons": {
-    "128": "icons/susi_icon.png",
-    "48": "icons/susi_icon.png",
-    "16": "icons/susi_icon.png"
+
+  	"512": "icons/susi_icon.svg",
+  	"384": "icons/susi_icon.svg",
+  	"256": "icons/susi_icon.svg",
+  	"192": "icons/susi_icon.svg",
+  	"144": "icons/susi_icon.svg",
+  	"128": "icons/susi_icon.svg",
+  	"96": "icons/susi_icon.svg",
+  	"48": "icons/susi_icon.svg",
+  	"16": "icons/susi_icon.svg"
+    
   },
+
 
   "content_security_policy": "script-src 'self' https://api.susi.ai; object-src 'self'",
 
