@@ -7,8 +7,8 @@ body{
   box-sizing: border-box;
 }
 .container{
-  width: 300px;
-  height: 400px;
+  width: 320px;
+  height: 450px;
 }
 
 .top-bar{
@@ -28,6 +28,7 @@ body{
   background-color: #f5f4f6;
   height: 75%;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 .message-container-my{
   text-align: right;
@@ -123,6 +124,71 @@ body{
   height: 10px;
   width: auto;
   margin: 13px 0;
+}
+/* Slick settings */
+.content-slick{
+  height: 270px;
+  padding: 10px 20px;
+  width: 100%;
+}
+.content-slick .card-slick{
+  background-color: #fff;
+  padding: 5px;
+  position: relative;
+  padding-bottom: 10px;
+  margin: 10px;
+  display: block;
+  text-align: center;
+  height: 230px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+  border-radius: 2px;
+}
+.content-slick .anchor{
+  text-decoration: none;
+}
+.slick-next{
+  right: 0px;
+}
+.slick-prev{
+  left: 0px;
+}
+.slick-prev:before, .slick-next:before {
+  color: #555;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+}
+.content-slick .slick-list{
+  max-height: 100%;
+}
+.content-slick .card-slick .title{
+  margin: 5px 0;
+  font-size: 14px;
+  color: rgb(66, 133, 244);
+  display: block;
+  max-height: 35px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  text-decoration: none;
+}
+.content-slick .card-slick .description{
+  margin: 0;
+  color: #000;
+  height: 40px;
+  overflow: hidden;
+}
+.content-slick .card-slick img{
+  width: auto;
+  max-width: 100%;
+  height: 100px;
+  margin:auto;
+}
+.domain{
+  color: #a9a9a9;
+  position: absolute;
+  bottom: 10px;
+  right: 5px;
+  font-size: 13px;
 }
 /*Input section*/
 .input-area{

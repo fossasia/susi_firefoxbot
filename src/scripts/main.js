@@ -3,58 +3,43 @@ var messageFormElement = document.getElementById("messageForm");
 var inputMessageElement = document.getElementById("inputMessage");
 var messagesHistoryElement = document.getElementById("messagesHistory");
 var messageCount=0;
-var messagesHistory=[]; 
+var messagesHistory=[];
+var enableSync=true;// set false for testing purpose
+
 messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
 });
-
-document.addEventListener("DOMContentLoaded", restoreMessages);
-
+if(enableSync){
+//browser.storage.sync.clear(); //Uncomment the line below and run the extension to clear the storage.
+	document.addEventListener("DOMContentLoaded", restoreMessages);
+}
 function restoreMessages(){
-	//Uncomment the line below and run the extension to clear the storage.
-	//browser.storage.sync.clear();
 	var buffer = browser.storage.sync.get(null);
 	buffer.then(function(res){
 		if(res["messagesHistory"]){
 			messagesHistory = res["messagesHistory"];
-			var currentTimeString=getCurrentTimeString();
 			for(var i = 0  ; i < messagesHistory.length ;  i++){
-				if(messagesHistory[i].type === "my"){
-					createMyMessageHistory(messagesHistory[i].message , messagesHistory[i].timeStamp , messagesHistory[i].msgId );
-				}
-				else{
-					createSusiMessageHistory(messagesHistory[i].message , messagesHistory[i].timeStamp , messagesHistory[i].msgId );
-				}
+				$(messagesHistory[i]).appendTo(messagesHistoryElement);
 			}
+			$(".content-slick").slick({
+				slidesToShow:1,
+				centerMode:true,
+				centerPadding:"20px",
+				arrows:true,
+				dots:false,
+				infinite:true,
+				dotsClass:"slick-dots slick-dots-ul",
+
+			});
+			setTimeout(function(){
+				messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;// to apply styles on the dynamic slider
+			},100);
+
 		}
+
 	});
 }
-
-function createMyMessageHistory(message,timeString,msgId){
-	$(
-		"<div class='message-container message-container-my' id='myMessage"+msgId+"'> \
-    <div class='message-box message-my'> \
-    <div class='message-text'>"+message+"</div> \
-    <div class='message-time'>"+timeString+"</div> \
-    </div> \
-  </div>"
-	).appendTo(messagesHistoryElement);
-	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
-}
-
-function createSusiMessageHistory(message,timeString,msgId_susi){
-	$(
-		"<div class='message-container message-container-susi' id='susiMessage"+msgId_susi+"'> \
-    <div class='message-box-susi message-susi'>\
-    <div class='message-text'>"+message+"</div> \
-    <div class='message-time'>"+timeString+"</div> \
-    </div> \
-  </div>"
-	).appendTo(messagesHistoryElement);
-	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
-}
-
 
 function handleMessageInputSubmit(){
 	var message=inputMessageElement.value;
@@ -65,9 +50,7 @@ function handleMessageInputSubmit(){
 	}
 	else{
 		var currentTimeString=getCurrentTimeString();
-		var msgId=messagesHistory.length+1;
-		messagesHistory.push({"message" : message, "msgId" : msgId.toString(), "type" : "my", "timeStamp" : currentTimeString});
-		browser.storage.sync.set({"messagesHistory": messagesHistory});
+		var msgId=messagesHistory.length;
 		createMyMessage(message,currentTimeString,msgId);
 	}
 
@@ -94,28 +77,85 @@ function getCurrentTimeString() {
 }
 
 function createMyMessage(message,timeString,msgId){
-	$(
-		"<div class='message-container message-container-my' id='myMessage"+msgId+"'> \
-    <div class='message-box message-my'> \
-    <div class='message-text'>"+message+"</div> \
-    <div class='message-time'>"+timeString+"</div> \
-    </div> \
-  </div>"
-	).appendTo(messagesHistoryElement);
+	var htmlMsg="<div class='message-container message-container-my' id='myMessage"+msgId+"'> \
+	<div class='message-box message-my'> \
+		<div class='message-text'>"+message+"</div> \
+		<div class='message-time'>"+timeString+"</div> \
+	</div> \
+	</div>";
+	$(htmlMsg).appendTo(messagesHistoryElement);
+	messagesHistory.push(htmlMsg);
+	if(enableSync){
+		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	}
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
 	fetchResponse(message,msgId);
 }
 
 
-function createSusiMessage(message,timeString,msgId_susi){
-	$("#susiMessage"+msgId_susi).html(
-		"<div class='message-box-susi message-susi'> \
-    <div class='message-text'>"+message+"</div> \
-    <div class='message-time'>"+timeString+"</div> \
-  </div>").appendTo(messagesHistoryElement);
+function createSusiMessageAnswer(message,timeString,msgId_susi){
+	var htmlMsg="<div class='message-box-susi message-susi'> \
+<div class='message-text'>"+message+"</div> \
+<div class='message-time'>"+timeString+"</div> \
+</div>";
+	$("#susiMessage"+msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
-	messagesHistory.push({"message" : message, "msgId" : msgId_susi.toString(), "type" : "susi", "timeStamp" : timeString});
-	browser.storage.sync.set({"messagesHistory": messagesHistory});
+	messagesHistory.push($("#susiMessage"+msgId_susi).prop("outerHTML"));
+	if(enableSync){
+		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	}
+}
+function createSusiMessageRss(answers,count,currentTimeString,msgId){
+	var rssHtml=$("<div class='content-slick' id=contentSlick"+msgId+"> \
+	</div> \
+	");
+	rssHtml=rssHtml[0];
+	var i=0;
+	var included=0;
+	while(included!==count && i<answers.length){
+		var answer=answers[i];
+		var title=answer.title?answer.title:"";
+		var description=answer.description?answer.description:"";
+		var link=answer.link?answer.link:"";
+		if(answer.image || (included===0 && i===answers.length-1)) {
+			included++;
+			var image=answer.image?answer.image:"";
+			$("<a target='_blank' class='anchor' href='"+link+"'><div class='card-slick'> \
+		<img src="+image+" /> \
+		<h4 class='title'>"+title+"</h4> \
+		<p class='description'>"+description+"</p>\
+		<span class='domain'>"+urlDomain(link)+"</span> \
+	</div></a>").appendTo(rssHtml);
+		}
+		i++;
+	}
+	var rssContainer = $(rssHtml).appendTo($("#susiMessage"+msgId));
+	messagesHistory.push($("#susiMessage"+msgId).prop("outerHTML"));
+	if(enableSync){
+		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	}
+	// initialize slick slider
+	$("#contentSlick"+msgId).slick({
+		slidesToShow:1,
+		centerMode:true,
+		centerPadding:"20px",
+		arrows:true,
+		dots:false,
+		infinite:true,
+		dotsClass:"slick-dots slick-dots-ul",
+
+	});
+	setTimeout(function(){
+		messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;// to apply styles on the dynamic slider
+	},100);
+
+}
+
+// Get hostname for given link
+function urlDomain(data) {
+	var a = document.createElement("a");
+	a.href = data;
+	return a.hostname;
 }
 
 function showLoading(show,msgId_susi){
@@ -149,27 +189,51 @@ function fetchResponse(query,msgId) {
 				errorText: "Sorry! request could not be made"
 			};
 			var currentTimeString=getCurrentTimeString();
-			createSusiMessage(response, currentTimeString);
+			createSusiMessageAnswer(response, currentTimeString,msgId_susi);
 		},
 		success: function (data) {
 			showLoading(false,msgId_susi);
-			if (query !== data.answers[0].data[0].query) {
-				// return fetchResponse(query,messageCount++);
-				// need to implement various type responses
-			}
-			var response = composeResponse(data);
 			var currentTimeString=getCurrentTimeString();
-			createSusiMessage(response, currentTimeString, msgId_susi);
-
+			composeResponse(data,currentTimeString,msgId_susi);
 		}
 	});
 }
 
-
-function composeResponse(data){
-	var answer = data.answers[0].data[0].answer;
-	/*need to work on different type of responses*/
-	return answer;
+function composeResponse(data,currentTimeString,msgId_susi){
+	var actions=data.answers[0].actions;
+	var msgId=msgId_susi;
+	for(var action_index = 0;action_index<actions.length;action_index++){
+		var action=actions[action_index];
+		var type=action.type;
+		var answers=[];
+		var count=0;
+		var expression="";
+		if(action_index!==0){
+			messageCount++;
+			msgId++;// create a new message
+			showLoading(true,msgId);
+			showLoading(false,msgId);
+		}
+		if(type==="answer"){
+			expression=action.expression;
+			createSusiMessageAnswer(expression,currentTimeString,msgId);
+		}
+		else if(type==="rss"){
+			answers=data.answers[0].data;
+			count = action.count;
+			createSusiMessageRss(answers,count,currentTimeString,msgId);
+		}
+		else if(type==="websearch"){
+			answers=data.answers[0].data;
+			count = action.count;
+			createSusiMessageRss(answers,count,currentTimeString,msgId);
+		}
+		else{
+			// add support for duckduckgo search, maps, tables
+			expression="unable to fetch";
+			createSusiMessageAnswer(expression,currentTimeString,msgId);
+		}
+	}
 }
 
 setTimeout(function(){

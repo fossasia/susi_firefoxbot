@@ -25,16 +25,17 @@
   	"96": "icons/susi_icon.svg",
   	"48": "icons/susi_icon.svg",
   	"16": "icons/susi_icon.svg"
-    
+
   },
 
 
-  "content_security_policy": "script-src 'self' https://api.susi.ai; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://api.susi.ai https://cdn.jsdelivr.net/; object-src 'self'",
 
   "permissions":[
     "http://*/*",
     "https://*/*",
     "http://ajax.googleapis.com/ajax/libs/jquery/",
-    "storage"
+    "storage",
+    "https://cdn.jsdelivr.net/"
   ]
 }
