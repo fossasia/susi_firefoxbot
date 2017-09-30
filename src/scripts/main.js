@@ -94,6 +94,9 @@ function createMyMessage(message,timeString,msgId){
 
 
 function createSusiMessageAnswer(message,timeString,msgId_susi){
+	message=message.replace(/https?:[/|.|\w]*/gi,function composeLink(link){
+		return "<a href='"+link+"' target='_blank'>"+link+"</a>";
+	});
 	var htmlMsg="<div class='message-box-susi message-susi'> \
 <div class='message-text'>"+message+"</div> \
 <div class='message-time'>"+timeString+"</div> \
