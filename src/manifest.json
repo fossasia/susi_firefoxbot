@@ -12,6 +12,11 @@
     "default_popup": "chatbot.html",
     "default_icon" : "icons/susi_icon.svg",
     "default_title" : "susi_ai"
+    
+  },
+
+  "options_ui": {
+    "page": "settings.html"
   },
 
   "icons": {

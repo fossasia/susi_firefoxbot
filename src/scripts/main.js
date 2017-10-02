@@ -2,9 +2,11 @@
 var messageFormElement = document.getElementById("messageForm");
 var inputMessageElement = document.getElementById("inputMessage");
 var messagesHistoryElement = document.getElementById("messagesHistory");
+var topBar = document.getElementById("nav");
 var messageCount=0;
 var messagesHistory=[];
 var enableSync=true;// set false for testing purpose
+var theme = "light"; //default
 
 messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
@@ -17,6 +19,7 @@ if(enableSync){
 function restoreMessages(){
 	var buffer = browser.storage.sync.get(null);
 	buffer.then(function(res){
+
 		if(res["messagesHistory"]){
 			messagesHistory = res["messagesHistory"];
 			for(var i = 0  ; i < messagesHistory.length ;  i++){
@@ -37,8 +40,54 @@ function restoreMessages(){
 			},100);
 
 		}
+		//set the theme
+		if(res["theme"]){
+			if(res["theme"]=="dark"){
+				theme = res["theme"];
+				$(".top-bar").addClass("dark");
+				$(".messages-history").addClass("dark");
+				$(".message-box").addClass("dark");
+				$(".message-box-susi").addClass("dark");
+				$(".input-area").addClass("dark");
+				$(".input-message").addClass("dark");
+				$(".material-icons").addClass("dark");
+
+			}
+			else{
+				theme = res["theme"];
+				$(".top-bar").removeClass("dark");
+				$(".messages-history").removeClass("dark");
+				$(".message-box").removeClass("dark");
+				$(".message-box-susi").removeClass("dark");
+				$(".input-area").removeClass("dark");
+				$(".input-message").removeClass("dark");
+				$(".material-icons").removeClass("dark");
+			}
+		}
 
 	});
+}
+
+function applyTheme(){
+	if(theme=="dark"){
+		$(".top-bar").addClass("dark");
+		$(".messages-history").addClass("dark");
+		$(".message-box").addClass("dark");
+		$(".message-box-susi").addClass("dark");
+		$(".input-area").addClass("dark");
+		$(".input-message").addClass("dark");
+		$(".material-icons").addClass("dark");
+
+	}
+	else{
+		$(".top-bar").removeClass("dark");
+		$(".messages-history").removeClass("dark");
+		$(".message-box").removeClass("dark");
+		$(".message-box-susi").removeClass("dark");
+		$(".input-area").removeClass("dark");
+		$(".input-message").removeClass("dark");
+		$(".material-icons").removeClass("dark");
+	}
 }
 
 function handleMessageInputSubmit(){
@@ -89,6 +138,7 @@ function createMyMessage(message,timeString,msgId){
 		browser.storage.sync.set({"messagesHistory": messagesHistory});
 	}
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
+	applyTheme();
 	fetchResponse(message,msgId);
 }
 
@@ -222,6 +272,7 @@ function showLoading(show,msgId_susi){
     </div>"
 		).appendTo(messagesHistoryElement);
 		messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
+		applyTheme();
 	}
 	else{
 		// hide loading in this msgId_susi
@@ -270,16 +321,19 @@ function composeResponse(data,currentTimeString,msgId_susi){
 		if(type==="answer"){
 			expression=action.expression;
 			createSusiMessageAnswer(expression,currentTimeString,msgId);
+			applyTheme();
 		}
 		else if(type==="rss"){
 			answers=data.answers[0].data;
 			count = action.count;
 			createSusiMessageRss(answers,count,currentTimeString,msgId);
+			applyTheme();
 		}
 		else if(type==="websearch"){
 			answers=data.answers[0].data;
 			count = action.count;
 			createSusiMessageRss(answers,count,currentTimeString,msgId);
+			applyTheme();
 		}
 		else if(type==="table"){
 			expression="table";
@@ -287,11 +341,13 @@ function composeResponse(data,currentTimeString,msgId_susi){
 			var columns = Object.keys(action.columns);
 			var columnsData = Object.values(action.columns);
 			createSusiMessageTable(tableData,columns,columnsData,currentTimeString,msgId);
+			applyTheme();
 		}
 		else{
 			// add support for duckduckgo search, maps, tables
 			expression="unable to fetch";
 			createSusiMessageAnswer(expression,currentTimeString,msgId);
+			applyTheme();
 		}
 	}
 }
