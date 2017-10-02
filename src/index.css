@@ -226,3 +226,43 @@ body{
 .input-area .input-button:hover{
   box-shadow: 0 3px 13px rgba(0,0,0,.3);
 }
+
+/* Table View */
+
+.table-view table{
+  width: 270px;
+   border-collapse: collapse;
+
+}
+
+.table-view table tbody td{
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  padding: 4px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  border-collapse: collapse;
+  
+}
+
+.table-view table tbody th{
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  color: #4285f4;
+  padding: 4px;
+  text-align: left;
+
+}
+
+.table-view table tbody{
+  overflow-x: hidden; 
+  padding: 0%;
+  text-overflow: ellipsis;
+
+}

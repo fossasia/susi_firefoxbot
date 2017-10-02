@@ -108,6 +108,56 @@ function createSusiMessageAnswer(message,timeString,msgId_susi){
 		browser.storage.sync.set({"messagesHistory": messagesHistory});
 	}
 }
+
+function createSusiMessageTable(tableData,columns,columnsData,timeString,msgId_susi){
+	var table = "<table><tbody><tr>";
+	var i = 0 ;
+	var j =0 ;
+
+	//create headers for the table
+	for(i = 0 ; i < columnsData.length ; i++){
+		table = table.concat("<th>"+columnsData[i]+"</th>");
+
+	}
+	table =table.concat("</tr>");
+	
+	for(i = 0 ; i < tableData.length ; i++){
+		table = table.concat("<tr>");
+			
+		for(j= 0; j < columns.length ;  j++){
+			//check if such column value exists for that record
+			if(tableData[i][columns[j]]){
+				var cellData  = tableData[i][columns[j]];
+				cellData.replace(/https?:[/|.|\w]*/gi,function composeLink(link){
+					cellData="<a href='"+cellData+"' target='_blank'>"+cellData+"</a>";
+				});
+
+				table = table.concat("<td>"+cellData + "</td>" );
+			}
+		}
+
+		table = table.concat("</tr>");
+
+	}
+
+	table =table.concat("</tbody></table>");
+
+	var htmlMsg="<div class='message-box-susi message-susi'> \
+	<div class='table-view'>"+table+"</div> \
+	<div class='message-time'>"+timeString+"</div> \
+	</div>";
+
+	$("#susiMessage"+msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
+	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
+	messagesHistory.push($("#susiMessage"+msgId_susi).prop("outerHTML"));
+
+	if(enableSync){
+		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	}
+
+}
+
+
 function createSusiMessageRss(answers,count,currentTimeString,msgId){
 	var rssHtml=$("<div class='content-slick' id=contentSlick"+msgId+"> \
 	</div> \
@@ -230,6 +280,13 @@ function composeResponse(data,currentTimeString,msgId_susi){
 			answers=data.answers[0].data;
 			count = action.count;
 			createSusiMessageRss(answers,count,currentTimeString,msgId);
+		}
+		else if(type==="table"){
+			expression="table";
+			var tableData = data.answers[0].data;
+			var columns = Object.keys(action.columns);
+			var columnsData = Object.values(action.columns);
+			createSusiMessageTable(tableData,columns,columnsData,currentTimeString,msgId);
 		}
 		else{
 			// add support for duckduckgo search, maps, tables
