@@ -6,9 +6,26 @@ body{
 *{
   box-sizing: border-box;
 }
+
+.dark a:visited{
+  color: #D22486;
+}
+
+.dark a{
+  color: #009DFF;
+}
+
 .container{
   width: 320px;
   height: 450px;
+}
+
+.dark{
+  background-color: #000000 ;
+}
+
+.top-bar.dark{
+  background-color: rgb(25, 50, 76) ;
 }
 
 .top-bar{
@@ -29,6 +46,10 @@ body{
   height: 75%;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.messages-history.dark{
+  background: linear-gradient(135deg,#183850,#183850 25%,#192c3e 50%,#22254c 75%,#22254c);
 }
 .message-container-my{
   text-align: right;
@@ -60,6 +81,13 @@ body{
   border-radius: 14px;
 }
 
+.message-box.dark{
+  background: rgba(25,147,147,.2);
+  color: #0ad5c1;
+  border:none;
+
+}
+
 .message-box-susi{
   position: relative;
   text-align: left;
@@ -75,11 +103,19 @@ body{
   padding: 6px 10px;
   margin: 4px;
   border-radius: 8px;
-  margin-right: : auto;
+  margin-right: auto;
   margin-left: 12px;
   border: 1.1px solid #ffffff;
   border-radius: 14px;
 }
+
+.message-box-susi.dark{
+  background: rgba(25,147,147,.2);
+  color: #0ec879;
+  border:none;
+
+}
+
 
 
 .message-box:after{
@@ -96,6 +132,12 @@ body{
   -webkit-transform-origin: 0 0;
   -ms-transform-origin: 0 0;
   transform-origin: 0 0;
+}
+
+.message-box.dark:after{
+  border-color: #1a4256 #1a4257 #1a4256 #1a4256;
+  background: rgba(25,147,147,.2);
+
 }
 
 .message-box-susi:before{
@@ -115,6 +157,11 @@ body{
   transform-origin: 0 0;
 }
 
+.message-box-susi.dark:before{
+  border-color: #1a4256 #1a4257 #1a4256 #1a4256;
+  background: rgba(25,147,147,.2);
+  
+}
 
 .message-time{
   font-size: 10px;
@@ -197,7 +244,15 @@ body{
   height: 13%;
 }
 
+.input-area.dark{
+  background-color: rgb(25, 50, 76);
+  box-shadow: none;
+  height: 13%;
+}
+
+
 .input-area .input-message{
+  font-size: 14px;
   background-color: #ffffff;
   border:none;
   width: 80%;
@@ -208,6 +263,13 @@ body{
   margin-left:8px;
   outline: none;
 }
+
+.input-area .input-message.dark{
+  background-color: rgb(25, 50, 76);
+  color: #0ec879;
+
+}
+
 .input-area .input-button{
   background-color: inherit;
   padding: 5px;
@@ -220,9 +282,18 @@ body{
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 }
 .input-area .input-button .material-icons{
+  background-color: transparent;
   vertical-align: middle;
   color: #4285f4;
 }
+
+.input-area .input-button .material-icons.dark{
+  background-color: transparent;
+  vertical-align: middle;
+  color: #0ec879;
+}
+
+
 .input-area .input-button:hover{
   box-shadow: 0 3px 13px rgba(0,0,0,.3);
 }
