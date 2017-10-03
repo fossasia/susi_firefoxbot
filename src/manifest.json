@@ -11,7 +11,7 @@
   "browser_action": {
     "default_popup": "chatbot.html",
     "default_icon" : "icons/susi_icon.svg",
-    "default_title" : "susi_ai"
+    "default_title" : "SUSI.AI (Alt+Shift+S)"
     
   },
 
@@ -42,5 +42,14 @@
     "http://ajax.googleapis.com/ajax/libs/jquery/",
     "storage",
     "https://cdn.jsdelivr.net/"
-  ]
+  ],
+
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      }
+    }
+  }
+
 }
