@@ -40,6 +40,15 @@ body{
   width: 30%;
 }
 
+.settings-icon{
+  display: inline-block;
+  position: fixed;
+  margin-left: 24%;
+  margin-top: 5%;
+  width: 7%;
+  
+}
+
 /*Message section*/
 .messages-history{
   background-color: #f5f4f6;
