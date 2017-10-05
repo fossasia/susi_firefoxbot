@@ -7,15 +7,22 @@ var messageCount=0;
 var messagesHistory=[];
 var enableSync=true;// set false for testing purpose
 var theme = "light"; //default
+var settingsIcon = document.getElementById("settingsIcon");
 
 messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
 });
+
 if(enableSync){
 //browser.storage.sync.clear(); //Uncomment the line below and run the extension to clear the storage.
 	document.addEventListener("DOMContentLoaded", restoreMessages);
 }
+
+settingsIcon.addEventListener("click", function() {
+	browser.runtime.openOptionsPage();
+});
+
 function restoreMessages(){
 	var buffer = browser.storage.sync.get(null);
 	buffer.then(function(res){
