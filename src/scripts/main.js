@@ -149,6 +149,18 @@ function createMyMessage(message,timeString,msgId){
 	fetchResponse(message,msgId);
 }
 
+function createSusiMessageImage(message,timeString,msgId_susi){
+	var htmlMsg="<div class='message-box-susi message-susi'> \
+<img class='message-img' src='"+message+"'></img> \
+<div class='message-time'>"+timeString+"</div> \
+</div>";
+	$("#susiMessage"+msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
+	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
+	messagesHistory.push($("#susiMessage"+msgId_susi).prop("outerHTML"));
+	if(enableSync){
+		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	}
+}
 
 function createSusiMessageAnswer(message,timeString,msgId_susi){
 	message=message.replace(/https?:[/|.|\w]*/gi,function composeLink(link){
@@ -327,7 +339,14 @@ function composeResponse(data,currentTimeString,msgId_susi){
 		}
 		if(type==="answer"){
 			expression=action.expression;
-			createSusiMessageAnswer(expression,currentTimeString,msgId);
+			if(expression.startsWith("https"))
+			{
+				createSusiMessageImage(expression,currentTimeString,msgId)
+			}
+			else
+			{
+				createSusiMessageAnswer(expression,currentTimeString,msgId);
+			}
 			applyTheme();
 		}
 		else if(type==="rss"){

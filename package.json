@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Firefox extension for SUSI Chat",
   "devDependencies": {
-    "eslint": "^4.7.2"
+    "eslint": "^4.8.0"
   },
   "repository": {
     "type": "git",
