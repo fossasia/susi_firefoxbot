@@ -337,3 +337,9 @@ body{
   text-overflow: ellipsis;
 
 }
+
+/* Image */
+
+.message-img{
+  max-width: 100%;
+}
