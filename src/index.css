@@ -46,7 +46,7 @@ body{
   margin-left: 24%;
   margin-top: 5%;
   width: 7%;
-  
+
 }
 
 /*Message section*/
@@ -169,7 +169,7 @@ body{
 .message-box-susi.dark:before{
   border-color: #1a4256 #1a4257 #1a4256 #1a4256;
   background: rgba(25,147,147,.2);
-  
+
 }
 
 .message-time{
@@ -245,6 +245,11 @@ body{
   bottom: 10px;
   right: 5px;
   font-size: 13px;
+}
+/*Map*/
+.map-div{
+    height: 180px;
+    width: 250px;
 }
 /*Input section*/
 .input-area{
@@ -325,7 +330,7 @@ body{
   text-align: left;
   border-bottom: 1px solid #ddd;
   border-collapse: collapse;
-  
+
 }
 
 .table-view table tbody th{
@@ -341,7 +346,7 @@ body{
 }
 
 .table-view table tbody{
-  overflow-x: hidden; 
+  overflow-x: hidden;
   padding: 0%;
   text-overflow: ellipsis;
 

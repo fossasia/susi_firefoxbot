@@ -12,7 +12,7 @@
     "default_popup": "chatbot.html",
     "default_icon" : "icons/susi_icon.svg",
     "default_title" : "SUSI.AI (Alt+Shift+S)"
-    
+
   },
 
   "options_ui": {
@@ -34,14 +34,17 @@
   },
 
 
-  "content_security_policy": "script-src 'self' https://api.susi.ai https://cdn.jsdelivr.net/; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://api.susi.ai https://unpkg.com/ https://cdn.jsdelivr.net/; object-src 'self'",
 
   "permissions":[
     "http://*/*",
     "https://*/*",
     "http://ajax.googleapis.com/ajax/libs/jquery/",
+    "https://unpkg.com/",
     "storage",
-    "https://cdn.jsdelivr.net/"
+    "geolocation",
+    "https://cdn.jsdelivr.net/",
+    "<all_urls>"
   ],
 
   "commands": {
