@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, L */
 var messageFormElement = document.getElementById("messageForm");
 var inputMessageElement = document.getElementById("inputMessage");
 var messagesHistoryElement = document.getElementById("messagesHistory");
@@ -8,15 +8,18 @@ var messagesHistory=[];
 var enableSync=true;// set false for testing purpose
 var theme = "light"; //default
 var settingsIcon = document.getElementById("settingsIcon");
-
+var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
 messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
 });
 
 if(enableSync){
-//browser.storage.sync.clear(); //Uncomment the line below and run the extension to clear the storage.
+//browser.storage.sync.clear(); //Uncomment the line and run the extension to clear the storage.
 	document.addEventListener("DOMContentLoaded", restoreMessages);
+}
+else{
+	getLocation();
 }
 
 settingsIcon.addEventListener("click", function() {
@@ -46,6 +49,16 @@ function restoreMessages(){
 				messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;// to apply styles on the dynamic slider
 			},100);
 
+		}
+		if(res["userMapObj"]){
+			userMapObj=res["userMapObj"];
+			for(var j=0;j<userMapObj.mapids.length;j++){
+				var mapSingle=userMapObj.mapids[j];
+				initiateMap(mapSingle.msgId,mapSingle.latitude,mapSingle.longitude,mapSingle.zoom);
+			}
+		}
+		else{
+			getLocation();
 		}
 		//set the theme
 		if(res["theme"]){
@@ -132,6 +145,33 @@ function getCurrentTimeString() {
 	return time;
 }
 
+function initiateMap(id,latitude,longitude,zoom){
+	var map = L.map(id).setView([latitude, longitude], zoom);
+
+	L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+		attribution: ""
+	}).addTo(map);
+
+	L.marker([latitude, longitude]).addTo(map)
+		.bindPopup("I am here")
+		.openPopup();
+}
+function getLocation() {
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(showPosition);
+	} else {
+		userMapObj.status="ERROR";
+	}
+}
+function showPosition(position) {
+	userMapObj.status="SUCCESS";
+	userMapObj.latitude=position.coords.latitude;
+	userMapObj.longitude=position.coords.longitude;
+	if(enableSync){
+		browser.storage.sync.set({"userMapObj": userMapObj});
+	}
+}
+
 function createMyMessage(message,timeString,msgId){
 	var htmlMsg="<div class='message-container message-container-my' id='myMessage"+msgId+"'> \
 	<div class='message-box message-my'> \
@@ -166,6 +206,41 @@ function createSusiMessageAnswer(message,timeString,msgId_susi){
 	}
 }
 
+function createSusiMessageAnchor(text,link,timeString,msgId_susi){
+	var htmlMsg="<div class='message-box-susi message-susi'> \
+<div class='message-text'>"+"<a href='"+link+"' target='_blank'>"+text+"</a>"+"</div> \
+<div class='message-time'>"+timeString+"</div> \
+</div>";
+	$("#susiMessage"+msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
+	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
+	messagesHistory.push($("#susiMessage"+msgId_susi).prop("outerHTML"));
+	if(enableSync){
+		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	}
+}
+function createSusiMessageMap(latitude,longitude,zoom,timeString,msgId_susi){
+	var mapid="map"+msgId_susi;
+	var maphtml="<div class='map-div' id='"+mapid+"'></div>";
+	var htmlMsg="<div class='message-box-susi message-susi'> \
+<div class='message-text'>"+maphtml+"</div> \
+<div class='message-time'>"+timeString+"</div> \
+</div>";
+	$("#susiMessage"+msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
+	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
+	messagesHistory.push($("#susiMessage"+msgId_susi).prop("outerHTML"));
+	var mapObj={
+		msgId:mapid,
+		latitude:latitude,
+		longitude:longitude,
+		zoom:zoom
+	};
+	userMapObj.mapids.push(mapObj);
+	initiateMap(mapid,latitude,longitude,zoom);
+	if(enableSync){
+		browser.storage.sync.set({"messagesHistory": messagesHistory,"userMapObj":userMapObj});
+	}
+}
+
 function createSusiMessageTable(tableData,columns,columnsData,timeString,msgId_susi){
 	var table = "<table><tbody><tr>";
 	var i = 0 ;
@@ -177,10 +252,10 @@ function createSusiMessageTable(tableData,columns,columnsData,timeString,msgId_s
 
 	}
 	table =table.concat("</tr>");
-	
+
 	for(i = 0 ; i < tableData.length ; i++){
 		table = table.concat("<tr>");
-			
+
 		for(j= 0; j < columns.length ;  j++){
 			//check if such column value exists for that record
 			if(tableData[i][columns[j]]){
@@ -288,11 +363,17 @@ function showLoading(show,msgId_susi){
 }
 function fetchResponse(query,msgId) {
 	var msgId_susi=msgId;
+	var latitude=userMapObj.latitude;
+	var longitude=userMapObj.longitude;
+	var url="https://api.susi.ai/susi/chat.json?language=en&timezoneOffset=-300&q=";
+	if(userMapObj.status==="SUCCESS"){
+		url="https://api.susi.ai/susi/chat.json?language=en&latitude="+latitude+"&longitude="+longitude+"&timezoneOffset=-300&q=";
+	}
 	showLoading(true, msgId_susi);
 	$.ajax({
 		dataType: "jsonp",
 		type: "GET",
-		url: "https://api.susi.ai/susi/chat.json?timezoneOffset=-300&q=" + query,
+		url: url + query,
 		error: function(xhr,textStatus,errorThrown) {
 			showLoading(false,msgId_susi);
 			var response = {
@@ -300,7 +381,7 @@ function fetchResponse(query,msgId) {
 				errorText: "Sorry! request could not be made"
 			};
 			var currentTimeString=getCurrentTimeString();
-			createSusiMessageAnswer(response, currentTimeString,msgId_susi);
+			createSusiMessageAnswer(response.errorText, currentTimeString,msgId_susi);
 		},
 		success: function (data) {
 			showLoading(false,msgId_susi);
@@ -327,7 +408,15 @@ function composeResponse(data,currentTimeString,msgId_susi){
 		}
 		if(type==="answer"){
 			expression=action.expression;
-			createSusiMessageAnswer(expression,currentTimeString,msgId);
+			if(expression){
+				createSusiMessageAnswer(expression,currentTimeString,msgId);
+				applyTheme();
+			}
+		}
+		else if(type==="anchor"){
+			var text=action.text;
+			var link=action.link;
+			createSusiMessageAnchor(text,link,currentTimeString,msgId);
 			applyTheme();
 		}
 		else if(type==="rss"){
@@ -350,8 +439,20 @@ function composeResponse(data,currentTimeString,msgId_susi){
 			createSusiMessageTable(tableData,columns,columnsData,currentTimeString,msgId);
 			applyTheme();
 		}
+		else if(type==="map"){
+			if(userMapObj.status==="SUCCESS"){
+				var latitude=action.latitude;
+				var longitude=action.longitude;
+				var zoom=action.zoom;
+				createSusiMessageMap(latitude,longitude,zoom,currentTimeString,msgId);
+			}
+			else{
+				createSusiMessageAnswer("Couldn't show map",currentTimeString,msgId);
+			}
+			applyTheme();
+		}
 		else{
-			// add support for duckduckgo search, maps, tables
+			// add support for duckduckgo search
 			expression="unable to fetch";
 			createSusiMessageAnswer(expression,currentTimeString,msgId);
 			applyTheme();
