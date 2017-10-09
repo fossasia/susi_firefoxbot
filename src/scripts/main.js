@@ -9,6 +9,7 @@ var enableSync=true;// set false for testing purpose
 var theme = "light"; //default
 var settingsIcon = document.getElementById("settingsIcon");
 var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
+var numberOfMessagesToLoad = 15;
 messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
@@ -17,6 +18,7 @@ messageFormElement.addEventListener("submit", function (event) {
 if(enableSync){
 //browser.storage.sync.clear(); //Uncomment the line and run the extension to clear the storage.
 	document.addEventListener("DOMContentLoaded", restoreMessages);
+	messagesHistoryElement.addEventListener("scroll",loadMoreMessages);
 }
 else{
 	getLocation();
@@ -26,13 +28,57 @@ settingsIcon.addEventListener("click", function() {
 	browser.runtime.openOptionsPage();
 });
 
+function loadMoreMessages(){
+	if(messagesHistoryElement.scrollTop == 0){
+		var startIndex;
+		var oldHeight = messagesHistoryElement.scrollHeight;
+		var buffer = browser.storage.sync.get(null);
+		buffer.then(function(res){
+			if(res["messagesHistory"]){
+				messagesHistory = res["messagesHistory"];
+				if(messagesHistoryElement.children.length < messagesHistory.length){
+					startIndex = messagesHistory.length - messagesHistoryElement.children.length - 1;
+					var endIndex = startIndex - numberOfMessagesToLoad;
+					if(endIndex < 0){
+						endIndex = 0;
+					}
+					for(var i = startIndex ; i >= endIndex;  i--){
+						$(messagesHistory[i]).prependTo(messagesHistoryElement);
+					}
+				}
+			}
+			applyTheme();
+			var newHeight = messagesHistoryElement.scrollHeight;
+			messagesHistoryElement.scrollTop = newHeight - oldHeight;
+			if(res["userMapObj"]){
+				userMapObj=res["userMapObj"];
+				for(var j=0;j<userMapObj.mapids.length;j++){
+					var mapSingle=userMapObj.mapids[j];
+					if((parseInt(mapSingle.msgId.split("p")[1]) < startIndex) && $("#"+mapSingle.msgId).length>0){
+						initiateMap(mapSingle.msgId,mapSingle.latitude,mapSingle.longitude,mapSingle.zoom);
+					}
+				}
+			}
+			$(".content-slick").slick({
+				slidesToShow:1,
+				centerMode:true,
+				centerPadding:"20px",
+				arrows:true,
+				dots:false,
+				infinite:true,
+				dotsClass:"slick-dots slick-dots-ul",
+			});
+		});
+	}
+}
+
 function restoreMessages(){
 	var buffer = browser.storage.sync.get(null);
 	buffer.then(function(res){
 
 		if(res["messagesHistory"]){
 			messagesHistory = res["messagesHistory"];
-			for(var i = 0  ; i < messagesHistory.length ;  i++){
+			for(var i = messagesHistory.length-numberOfMessagesToLoad; i < messagesHistory.length ;  i++){
 				$(messagesHistory[i]).appendTo(messagesHistoryElement);
 			}
 			$(".content-slick").slick({
@@ -54,7 +100,9 @@ function restoreMessages(){
 			userMapObj=res["userMapObj"];
 			for(var j=0;j<userMapObj.mapids.length;j++){
 				var mapSingle=userMapObj.mapids[j];
-				initiateMap(mapSingle.msgId,mapSingle.latitude,mapSingle.longitude,mapSingle.zoom);
+				if($("#"+mapSingle.msgId).length>0){
+					initiateMap(mapSingle.msgId,mapSingle.latitude,mapSingle.longitude,mapSingle.zoom);
+				}
 			}
 		}
 		else{
