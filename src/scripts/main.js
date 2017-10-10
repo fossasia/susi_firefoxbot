@@ -430,6 +430,7 @@ function fetchResponse(query,msgId) {
 			};
 			var currentTimeString=getCurrentTimeString();
 			createSusiMessageAnswer(response.errorText, currentTimeString,msgId_susi);
+			applyTheme();
 		},
 		success: function (data) {
 			showLoading(false,msgId_susi);
