@@ -29,12 +29,12 @@ settingsIcon.addEventListener("click", function() {
 });
 
 settingsIcon.addEventListener("mouseover",function() {
-	$('.settings-icon').css('cursor','pointer');
+	$(".settings-icon").css("cursor","pointer");
 	settingsIcon.src="images/settings-hover.svg";
 });
 
 settingsIcon.addEventListener("mouseout",function() {
-	$('.settings-icon').css('cursor','auto');
+	$(".settings-icon").css("cursor","auto");
 	settingsIcon.src="images/settings.svg";
 });
 
