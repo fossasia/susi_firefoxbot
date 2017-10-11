@@ -28,6 +28,16 @@ settingsIcon.addEventListener("click", function() {
 	browser.runtime.openOptionsPage();
 });
 
+settingsIcon.addEventListener("mouseover",function() {
+	$('.settings-icon').css('cursor','pointer');
+	settingsIcon.src="images/settings-hover.svg";
+});
+
+settingsIcon.addEventListener("mouseout",function() {
+	$('.settings-icon').css('cursor','auto');
+	settingsIcon.src="images/settings.svg";
+});
+
 function loadMoreMessages(){
 	if(messagesHistoryElement.scrollTop == 0){
 		var startIndex;
