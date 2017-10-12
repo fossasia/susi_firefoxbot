@@ -205,6 +205,13 @@ function getCurrentTimeString() {
 
 function initiateMap(id,latitude,longitude,zoom){
 	var map = L.map(id).setView([latitude, longitude], zoom);
+	map.scrollWheelZoom.disable();
+	map.on("click",function(){
+		map.scrollWheelZoom.enable();
+	});
+	map.on("mouseout",function(){
+		map.scrollWheelZoom.disable();
+	});
 
 	L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
 		attribution: ""
