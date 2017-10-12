@@ -6,7 +6,7 @@ SUSI.AI Firefox Extension
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/db948e1eb4b2457386ba80388e8390cf)](https://www.codacy.com/app/fossasia/susi_firefoxbot?utm_source=github.com&utm_medium=referral&utm_content=fossasia/susi_firefoxbot&utm_campaign=badger)
 ![Browser Status](https://badges.herokuapp.com/browsers?firefox=53,55)
 
-![SUSI_FIREFOXBOT_GIF](https://github.com/fossasia/susi_firefoxbot/blob/master/susi_firefoxbot.gif)
+![SUSI_FIREFOXBOT_GIF](https://github.com/fossasia/susi_firefoxbot/blob/master/susi_firefoxbot_updated.gif)
 
 ## Our Project Objectives
 
