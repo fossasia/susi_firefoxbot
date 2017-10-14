@@ -1,7 +1,7 @@
 # susi_firefoxbot
 
 SUSI.AI Firefox Extension
-
+[![Join the chat at https://gitter.im/fossasia/susi_server](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/fossasia/susi_server)
 [![Build Status](https://travis-ci.org/fossasia/susi_firefoxbot.svg?branch=master)](https://travis-ci.org/fossasia/susi_firefoxbot)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/db948e1eb4b2457386ba80388e8390cf)](https://www.codacy.com/app/fossasia/susi_firefoxbot?utm_source=github.com&utm_medium=referral&utm_content=fossasia/susi_firefoxbot&utm_campaign=badger)
 
