@@ -26,6 +26,16 @@ input[type=button], input[type=submit], input[type=reset] {
     background-color: #4285f4;
 }
 
+input[type=text], input[type=password], input[type=email] {
+    width: 30%;
+    border: 2px solid #4285f4 ;
+    padding: 16px 5px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 button{
     text-align: center;
     width: 30%;
