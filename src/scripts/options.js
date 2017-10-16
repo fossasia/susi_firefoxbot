@@ -78,7 +78,8 @@ function clearMessageHistory(){
 	var isConfirm = confirm("Are you sure? This cannot be undone.");
 	if(isConfirm == true){
 		//clears messages stored in browser
-		browser.storage.sync.clear();
+		browser.storage.sync.remove("messagesHistory");
+		browser.storage.sync.remove("userMapObj");
 	}
 }
 
