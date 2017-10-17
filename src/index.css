@@ -31,8 +31,16 @@ body{
 .top-bar{
   background-color: #4285f4;
   height: 12%;
+  padding-bottom: 10px;
 }
-
+.logged-info{
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+}
+.logged-email{
+  display: none;
+}
 .logo{
   display: relative;
   margin-left: 35%;
