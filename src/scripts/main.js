@@ -2,6 +2,7 @@
 var messageFormElement = document.getElementById("messageForm");
 var inputMessageElement = document.getElementById("inputMessage");
 var messagesHistoryElement = document.getElementById("messagesHistory");
+var loggedEmail = document.getElementById("loggedEmail");
 var topBar = document.getElementById("nav");
 var messageCount=0;
 var messagesHistory=[];
@@ -14,7 +15,22 @@ messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
 });
-
+// initialization based on cache status
+var buffer = browser.storage.sync.get(null);
+buffer.then(function(res){
+	if(res["loggedUser"]){
+		topBar.style.height="14%";
+		messagesHistoryElement.style.height="73%";
+		loggedEmail.style.display="inline";
+		loggedEmail.innerText=res["loggedUser"].email;
+	}
+	else{
+		topBar.style.height="12%";
+		messagesHistoryElement.style.height="75%";
+		loggedEmail.style.display="none";
+		loggedEmail.innerText="";
+	}
+});
 if(enableSync){
 //browser.storage.sync.clear(); //Uncomment the line and run the extension to clear the storage.
 	document.addEventListener("DOMContentLoaded", restoreMessages);

@@ -2,6 +2,8 @@
 /*global messagesHistory, enableSync, applyTheme, userMapObj, htmlMsg*/
 var settings = document.getElementById("settings");
 var clearMessageHistoryButton = document.getElementById("clearMessageHistory");
+var loginForm = document.getElementById("login");
+var logoutButton = document.getElementById("logout");
 var loginButton = document.getElementById("login");
 var accessToken = "";
 var time = "" ;
@@ -11,14 +13,16 @@ var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
 
 settings.addEventListener("submit", saveOptions);
 loginButton.addEventListener("submit", login);
+logoutButton.addEventListener("click", logout);
 clearMessageHistoryButton.addEventListener("click", clearMessageHistory);
 
 document.addEventListener("DOMContentLoaded", persistSettings);
 
 function login(event){
 	event.preventDefault();
+	var email=document.getElementById("username").value;
 	var loginEndPoint = BASE_URL+"/aaa/login.json?type=access-token&login="
-			+ encodeURIComponent(document.getElementById("username").value)
+			+ encodeURIComponent(email)
 			+ "&password="
 			+ encodeURIComponent(document.getElementById("password").value);
 	$.ajax({
@@ -30,10 +34,17 @@ function login(event){
 		success: function (response) {
 			if(response.accepted){
 				accessToken = response.access_token;
+				browser.storage.sync.set({
+					loggedUser:{
+						email:email
+					}
+				});
 				time = response.valid_seconds;
 				alert(response.message);
 				applyUserSettings();
 				retrieveUserChatHistory();
+				loginForm.style.display="none";
+				logoutButton.style.display="block";
 			}
 			else {
 				alert("Login Failed. Try Again");
@@ -56,7 +67,13 @@ function login(event){
 	});
 
 }
-
+function logout(){
+	browser.storage.sync.remove("messagesHistory");
+	browser.storage.sync.remove("userMapObj");
+	browser.storage.sync.remove("loggedUser");
+	loginForm.style.display="block";
+	logoutButton.style.display="none";
+}
 function applyUserSettings(){
 	var userSettings = BASE_URL+"/aaa/listUserSettings.json?access_token="+accessToken;
 	$.ajax({
@@ -72,7 +89,7 @@ function applyUserSettings(){
 					theme: response.settings.theme
 				});
 			}
-					
+
 		}
 	});
 
@@ -115,7 +132,6 @@ function clearMessageHistory(){
 function persistSettings(){
 	var buffer = browser.storage.sync.get(null);
 	buffer.then(function(res){
-
 		if(res["theme"]){
 			if(res["theme"]=="dark"){
 				$("#theme").val("dark");
@@ -123,6 +139,14 @@ function persistSettings(){
 			else{
 				$("#theme").val("light");
 			}
+		}
+		if(res["loggedUser"]){
+			loginForm.style.display="none";
+			logoutButton.style.display="block";
+		}
+		else{
+			loginForm.style.display="block";
+			logoutButton.style.display="none";
 		}
 
 	});
@@ -134,7 +158,7 @@ function saveOptions(e) {
 	browser.storage.sync.set({
 		theme: document.querySelector("#theme").value
 	});
-  
+
 }
 
 function createMyMessageHistory(message,timeString,msgId){

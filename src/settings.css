@@ -48,3 +48,7 @@ button{
     font-size: 16px;
     background-color: #4285f4;
 }
+
+.hide{
+    display: none;
+}
