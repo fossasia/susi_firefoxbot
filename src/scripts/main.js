@@ -11,6 +11,8 @@ var theme = "light"; //default
 var settingsIcon = document.getElementById("settingsIcon");
 var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
 var numberOfMessagesToLoad = 15;
+var isLogged = false;
+var accessToken = "";
 messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
@@ -23,6 +25,9 @@ buffer.then(function(res){
 		messagesHistoryElement.style.height="73%";
 		loggedEmail.style.display="inline";
 		loggedEmail.innerText=res["loggedUser"].email;
+		isLogged = true;
+		accessToken = res["loggedUser"].accessToken;
+
 	}
 	else{
 		topBar.style.height="12%";
@@ -450,11 +455,15 @@ function fetchResponse(query,msgId) {
 	if(userMapObj.status==="SUCCESS"){
 		url="https://api.susi.ai/susi/chat.json?language=en&latitude="+latitude+"&longitude="+longitude+"&timezoneOffset=-300&q=";
 	}
+	url = url + query ;
+	if(isLogged){
+		url = url + "&access_token=" + accessToken;
+	}
 	showLoading(true, msgId_susi);
 	$.ajax({
 		dataType: "jsonp",
 		type: "GET",
-		url: url + query,
+		url: url,
 		error: function(xhr,textStatus,errorThrown) {
 			showLoading(false,msgId_susi);
 			var response = {
@@ -471,6 +480,7 @@ function fetchResponse(query,msgId) {
 			composeResponse(data,currentTimeString,msgId_susi);
 		}
 	});
+
 }
 
 function composeResponse(data,currentTimeString,msgId_susi){
