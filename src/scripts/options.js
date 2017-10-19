@@ -112,9 +112,9 @@ function retrieveUserChatHistory(){
 				var queryResponsePair = response.cognitions[i];
 				var queryDate = new Date(Date.parse(queryResponsePair.query_date));
 				var answerDate = new Date(Date.parse(queryResponsePair.answer_date));
-				createMyMessageHistory(queryResponsePair.query, queryDate.toLocaleTimeString(), messagesHistory.length);
+				createMyMessageHistory(queryResponsePair.query, queryDate.toLocaleTimeString([], {hour: "2-digit", minute:"2-digit"}), messagesHistory.length);
 				if(queryResponsePair.answers.length>0){
-					createSusiMessageHistory(queryResponsePair, answerDate.toLocaleTimeString(), messagesHistory.length);
+					createSusiMessageHistory(queryResponsePair, answerDate.toLocaleTimeString([], {hour: "2-digit", minute:"2-digit"}), messagesHistory.length);
 				}
 			}
 		}
