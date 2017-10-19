@@ -17,9 +17,11 @@ messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
 });
+
 // initialization based on cache status
 var buffer = browser.storage.sync.get(null);
 buffer.then(function(res){
+	//to show the logged in email
 	if(res["loggedUser"]){
 		topBar.style.height="14%";
 		messagesHistoryElement.style.height="73%";
@@ -35,6 +37,7 @@ buffer.then(function(res){
 		loggedEmail.style.display="none";
 		loggedEmail.innerText="";
 	}
+
 });
 if(enableSync){
 //browser.storage.sync.clear(); //Uncomment the line and run the extension to clear the storage.
@@ -163,7 +166,18 @@ function restoreMessages(){
 				$(".material-icons").removeClass("dark");
 			}
 		}
+		// extract from local memory
+		var bufferLocal = browser.storage.local.get(null);
+		bufferLocal.then(function(res){
+			// search for a query selected by Context Menu
+			if(res["contextQuery"]){
+				var query = res["contextQuery"] ;
+				inputMessageElement.value=query;
+				document.getElementById("inputSubmit").click();
+				browser.storage.local.remove("contextQuery");
+			}
 
+		});
 	});
 }
 

@@ -18,7 +18,9 @@
   "options_ui": {
     "page": "settings.html"
   },
-
+  "background": {
+  "scripts": ["scripts/background.js"]
+  },
   "icons": {
 
   	"512": "icons/susi_icon.svg",
@@ -43,6 +45,7 @@
     "https://unpkg.com/",
     "storage",
     "geolocation",
+    "contextMenus",
     "https://cdn.jsdelivr.net/",
     "<all_urls>"
   ],
