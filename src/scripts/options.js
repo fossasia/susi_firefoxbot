@@ -36,7 +36,8 @@ function login(event){
 				accessToken = response.access_token;
 				browser.storage.sync.set({
 					loggedUser:{
-						email:email
+						email:email,
+						accessToken: accessToken
 					}
 				});
 				time = response.valid_seconds;
@@ -105,7 +106,8 @@ function retrieveUserChatHistory(){
 		jsonp: "callback",
 		crossDomain: true,
 		success: function (response) {
-			browser.storage.sync.clear();
+			browser.storage.sync.remove("messagesHistory");
+			browser.storage.sync.remove("userMapObj");
 			for(var i = response.cognitions.length-1 ; i >= 0 ; i--){
 				var queryResponsePair = response.cognitions[i];
 				var queryDate = new Date(Date.parse(queryResponsePair.query_date));
