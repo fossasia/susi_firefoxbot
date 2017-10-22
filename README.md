@@ -23,7 +23,7 @@ We noticed that users don't want to open susi web chat everytime and would prefe
 ## Installation
 
 ```sh
-$ git clone https://github.com/tstreamDOTh/susi_firefoxbot
+$ git clone https://github.com/fossasia/susi_firefoxbot
 $ cd susi_firefoxbot
 $ cd src
 ```
