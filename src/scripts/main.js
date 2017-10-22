@@ -253,7 +253,7 @@ function initiateMap(id,latitude,longitude,zoom){
 	}).addTo(map);
 
 	L.marker([latitude, longitude]).addTo(map)
-		.bindPopup("I am here")
+		.bindPopup("Here !")
 		.openPopup();
 }
 function getLocation() {
