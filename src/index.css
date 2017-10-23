@@ -126,6 +126,11 @@ body{
   border-radius: 14px;
 }
 
+.message-box-susi img{
+  width: 100%;
+  height: auto;
+}
+
 .message-box-susi.dark{
   background: rgba(25,147,147,.2);
   color: #0ec879;
