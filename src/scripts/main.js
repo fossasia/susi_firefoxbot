@@ -13,6 +13,7 @@ var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
 var numberOfMessagesToLoad = 15;
 var isLogged = false;
 var accessToken = "";
+var BASE_URL = "https://api.susi.ai";
 messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
@@ -109,6 +110,11 @@ function loadMoreMessages(){
 function restoreMessages(){
 	var buffer = browser.storage.sync.get(null);
 	buffer.then(function(res){
+		if (res["serverOpt"]) {
+			if (res["serverOpt"] === "custom") {
+				BASE_URL = res["serverName"];
+			}
+		}
 
 		if(res["messagesHistory"]){
 			messagesHistory = res["messagesHistory"];
@@ -473,9 +479,9 @@ function fetchResponse(query,msgId) {
 	var msgId_susi=msgId;
 	var latitude=userMapObj.latitude;
 	var longitude=userMapObj.longitude;
-	var url="https://api.susi.ai/susi/chat.json?language=en&timezoneOffset=-300&q=";
+	var url=BASE_URL + "/susi/chat.json?language=en&timezoneOffset=-300&q=";
 	if(userMapObj.status==="SUCCESS"){
-		url="https://api.susi.ai/susi/chat.json?language=en&latitude="+latitude+"&longitude="+longitude+"&timezoneOffset=-300&q=";
+		url=BASE_URL + "/susi/chat.json?language=en&latitude="+latitude+"&longitude="+longitude+"&timezoneOffset=-300&q=";
 	}
 	url = url + query ;
 	if(isLogged){
