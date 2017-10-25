@@ -2,7 +2,7 @@
 // add a context Menu
 browser.contextMenus.create({
 	id: "search-selection",
-	title: "Ask SUSI",
+	"title" : "Ask SUSI - \""+"%s"+"\"",
 	contexts: ["selection"]
 }, onCreated);
 
