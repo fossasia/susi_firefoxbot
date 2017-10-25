@@ -177,6 +177,11 @@ function restoreMessages(){
 				browser.storage.local.remove("contextQuery");
 			}
 
+			if(res["contextCopyQuery"]) {
+				inputMessageElement.value = res["contextCopyQuery"];
+				browser.storage.local.remove("contextCopyQuery");
+			}
+
 		});
 	});
 }

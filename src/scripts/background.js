@@ -6,6 +6,12 @@ browser.contextMenus.create({
 	contexts: ["selection"]
 }, onCreated);
 
+browser.contextMenus.create({
+	id: "copy-selection",
+	title: "Copy to SUSI",
+	contexts: ["selection"]
+}, onCreated);
+
 function onCreated(){
 }
 
@@ -16,6 +22,13 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
 		var txt = info.selectionText;
 		browser.storage.local.set({
 			"contextQuery":txt
+		});
+		//supports only firefox 57
+		browser.browserAction.openPopup();
+		break;
+	case "copy-selection":
+		browser.storage.local.set({
+			"contextCopyQuery":info.selectionText
 		});
 		//supports only firefox 57
 		browser.browserAction.openPopup();
