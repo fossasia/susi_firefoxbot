@@ -2,18 +2,20 @@
 <html>
 <head>
 	<title>SUSI Addon Settings</title>
-	<link rel="stylesheet" type="text/css" href="settings.css">
+	<link rel="stylesheet" type="text/css" href="css/settings.css">
+	<script src="https://use.fontawesome.com/44f32e93e1.js"></script>
 </head>
 <body>
 	<div class="nologgedin" id="nologgedin">
 		<form id="login" >
-			<h3>Login</h3>
+			<h3 class="hr-heading">Login</h3>
+			<hr />
 			<input type="email" id="username" placeholder="Email">
 			<br>
 			<input type="password" id="password" placeholder="Password">
 			<br>
 			<br>
-			<input type="submit" name="Login" value="Login">
+			<button type="submit" name="Login" id="loginbutton" value="Login">Login</button>
 			<br>
 			<a href="https://chat.susi.ai/">New User? Visit our website to sign up for free.</a>
 		</form>
@@ -22,31 +24,27 @@
 		<input type="button" id="logout" value="Logout" />
 		<br />
 		<form id="changepasswordform">
-			<h3>Change Password</h3>
+			<h3 class="hr-heading">Change Password</h3>
+			<hr />
 			<input type="password" id="passwordchange" placeholder="Current Password">
 			<br>
 			<input type="password" id="passwordnew" placeholder="New Password">
 			<br>
 			<input type="password" id="passwordnewconfirm" placeholder="Confirm New Password">
 			<br>
-			<input type="submit" id="changepasswordsubmit" value="Change Password" />
+			<button type="submit" id="changepasswordsubmit">Change Password</button>
 		</form>
 	</div>
 	<br>
-	<h3>Settings</h3>
+	<h3 class="hr-heading">Settings</h3>
+	<hr />
 	<h4>Theme</h4>
-	<form id="settings" >
-		<select id="theme">
-			<option value="light">Light</option>
-			<option value="dark">Dark</option>
-		</select>
-		<br>
-		<br>
-		<br>
-		<input type="submit" name="Save" value="Save"/>
-	</form>
+	<select id="theme" name="theme">
+		<option value="light">Light</option>
+		<option value="dark">Dark</option>
+	</select>
 	<br>
-	<button id="clearMessageHistory">Clear History</button>
+	<button class="clear-history-button" id="clearMessageHistory">Clear Message History</button>
 	<script src="scripts/jquery-3.2.1.min.js"></script>
 	<script src="scripts/main.js"></script>
 	<script src="scripts/options.js"></script>

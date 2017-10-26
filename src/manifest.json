@@ -36,7 +36,7 @@
   },
 
 
-  "content_security_policy": "script-src 'self' https://api.susi.ai https://unpkg.com/ https://cdn.jsdelivr.net/; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://api.susi.ai https://unpkg.com/ https://cdn.jsdelivr.net/ https://use.fontawesome.com; object-src 'self'",
 
   "permissions":[
     "http://*/*",
