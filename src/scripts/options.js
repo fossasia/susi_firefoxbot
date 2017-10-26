@@ -150,6 +150,12 @@ function persistSettings(){
 			loginForm.style.display="block";
 			logoutButton.style.display="none";
 		}
+		if(res["serverOpt"]) {
+			$("input[name=serverOption]").val([res["serverOpt"]]);
+			if(res["serverOpt"] === "custom") {
+				$("#customServer").val(res["serverName"]);
+			}
+		}
 
 	});
 }
@@ -157,8 +163,18 @@ function persistSettings(){
 
 function saveOptions(e) {
 	e.preventDefault();
+	var selectedServer = "";
+	var selectedServerOpt = $("input[name=serverOption]:checked").val();
+	if (selectedServerOpt === "default") {
+		selectedServer = "https://api.susi.ai";
+		$("#customServer").val("");
+	} else {
+		selectedServer = $("#customServer").val();
+	}
 	browser.storage.sync.set({
-		theme: document.querySelector("#theme").value
+		theme: document.querySelector("#theme").value,
+		serverOpt: selectedServerOpt,
+		serverName: selectedServer
 	});
 
 }
