@@ -5,18 +5,39 @@ var clearMessageHistoryButton = document.getElementById("clearMessageHistory");
 var loginForm = document.getElementById("login");
 var logoutButton = document.getElementById("logout");
 var loginButton = document.getElementById("login");
+var noLoggedInBlock = document.getElementById("nologgedin");
+var loggedInBlock = document.getElementById("loggedin");
+var changePasswordForm = document.getElementById("changepasswordform");
 var accessToken = "";
+var userEmail = "";
 var time = "" ;
 var BASE_URL = "https://api.susi.ai";
 var messagesHistory=[];
 var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
 
 settings.addEventListener("submit", saveOptions);
-loginButton.addEventListener("submit", login);
+loginForm.addEventListener("submit", login);
+changePasswordForm.addEventListener("submit", handleChangePassword);
 logoutButton.addEventListener("click", logout);
 clearMessageHistoryButton.addEventListener("click", clearMessageHistory);
 
 document.addEventListener("DOMContentLoaded", persistSettings);
+
+function showLoggedInBlock(show){
+	if(show){
+		noLoggedInBlock.style.display="none";
+		loggedInBlock.style.display="block";
+		document.getElementById("passwordchange").value="";
+		document.getElementById("passwordnewconfirm").value = "";
+		document.getElementById("passwordnew").value = "";
+	}
+	else{
+		noLoggedInBlock.style.display="block";
+		loggedInBlock.style.display="none";
+		document.getElementById("username").value = "";
+		document.getElementById("password").value = "";
+	}
+}
 
 function login(event){
 	event.preventDefault();
@@ -34,6 +55,7 @@ function login(event){
 		success: function (response) {
 			if(response.accepted){
 				accessToken = response.access_token;
+				userEmail = email;
 				browser.storage.sync.set({
 					loggedUser:{
 						email:email,
@@ -44,8 +66,7 @@ function login(event){
 				alert(response.message);
 				applyUserSettings();
 				retrieveUserChatHistory();
-				loginForm.style.display="none";
-				logoutButton.style.display="block";
+				showLoggedInBlock(true);
 			}
 			else {
 				alert("Login Failed. Try Again");
@@ -68,12 +89,75 @@ function login(event){
 	});
 
 }
+function handleChangePassword(event){
+	event.preventDefault();
+	var password=document.getElementById("passwordchange").value;
+	var newpassword = document.getElementById("passwordnew").value;
+	var passwordnewconfirm = document.getElementById("passwordnewconfirm").value;
+	if(!password || !newpassword || !passwordnewconfirm){
+		alert("Please fill all the fields");
+		return;
+	}
+	if(newpassword !==passwordnewconfirm){
+		alert("Confirm password should match");
+		return;
+	}
+	if(password === newpassword){
+		alert("Your current password matches new password.");
+		return;
+	}
+	var passwordChangeEndPoint = BASE_URL+"/aaa/changepassword.json?changepassword="
+			+ userEmail
+			+ "&password="
+			+ encodeURIComponent(password)
+			+ "&newpassword="
+			+ encodeURIComponent(newpassword)
+			+ "&access_token="
+			+ accessToken;
+	$.ajax({
+		url: passwordChangeEndPoint,
+		dataType: "jsonp",
+		jsonpCallback: "p",
+		jsonp: "callback",
+		crossDomain: true,
+		success: function (response) {
+			if(response.accepted){
+				logout();
+				alert(response.message + " Please login again");
+			}
+			else {
+				if(response.message)
+					alert(response.message);
+				else
+					alert("Changing Password Failed. Try Again");
+			}
+		},
+		error: function ( jqXHR, textStatus, errorThrown) {
+			var msg = "";
+			var jsonValue =  jqXHR.status;
+			if (jsonValue === 404) {
+				msg = "Changing Password Failed. Try Again";
+			}
+			else {
+				msg = "Some error occurred. Try Again";
+			}
+			if (status === "timeout") {
+				msg = "Please check your internet connection";
+			}
+			if(jqXHR.message){
+				msg = jqXHR.message;
+			}
+			alert(msg);
+		}
+	});
+
+}
+
 function logout(){
 	browser.storage.sync.remove("messagesHistory");
 	browser.storage.sync.remove("userMapObj");
 	browser.storage.sync.remove("loggedUser");
-	loginForm.style.display="block";
-	logoutButton.style.display="none";
+	showLoggedInBlock(false);
 }
 function applyUserSettings(){
 	var userSettings = BASE_URL+"/aaa/listUserSettings.json?access_token="+accessToken;
@@ -143,12 +227,12 @@ function persistSettings(){
 			}
 		}
 		if(res["loggedUser"]){
-			loginForm.style.display="none";
-			logoutButton.style.display="block";
+			accessToken = res["loggedUser"].accessToken;
+			userEmail = res["loggedUser"].email;
+			showLoggedInBlock(true);
 		}
 		else{
-			loginForm.style.display="block";
-			logoutButton.style.display="none";
+			showLoggedInBlock(false);
 		}
 
 	});
