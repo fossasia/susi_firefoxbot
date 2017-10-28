@@ -1,10 +1,10 @@
 /* global $ */
 /*global messagesHistory, enableSync, applyTheme, userMapObj, htmlMsg*/
-var settings = document.getElementById("settings");
+var themeSelect = document.getElementById("theme");
 var clearMessageHistoryButton = document.getElementById("clearMessageHistory");
 var loginForm = document.getElementById("login");
 var logoutButton = document.getElementById("logout");
-var loginButton = document.getElementById("login");
+var loginButton = document.getElementById("loginbutton");
 var noLoggedInBlock = document.getElementById("nologgedin");
 var loggedInBlock = document.getElementById("loggedin");
 var changePasswordForm = document.getElementById("changepasswordform");
@@ -15,7 +15,7 @@ var BASE_URL = "https://api.susi.ai";
 var messagesHistory=[];
 var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
 
-settings.addEventListener("submit", saveOptions);
+themeSelect.addEventListener("change", saveOptions);
 loginForm.addEventListener("submit", login);
 changePasswordForm.addEventListener("submit", handleChangePassword);
 logoutButton.addEventListener("click", logout);
@@ -42,10 +42,20 @@ function showLoggedInBlock(show){
 function login(event){
 	event.preventDefault();
 	var email=document.getElementById("username").value;
+	var password=document.getElementById("password").value;
+	if(!email){
+		alert("Email can't be blank");
+		return;
+	}
+	else if(!password){
+		alert("Password can't be blank");
+		return;
+	}
+	loginButton.innerHTML="<i class='fa fa-spinner fa-spin fa-2x fa-fw'></i>";
 	var loginEndPoint = BASE_URL+"/aaa/login.json?type=access-token&login="
 			+ encodeURIComponent(email)
 			+ "&password="
-			+ encodeURIComponent(document.getElementById("password").value);
+			+ encodeURIComponent(password);
 	$.ajax({
 		url: loginEndPoint,
 		dataType: "jsonp",
@@ -63,6 +73,7 @@ function login(event){
 					}
 				});
 				time = response.valid_seconds;
+				loginButton.innerHTML="Login";
 				alert(response.message);
 				applyUserSettings();
 				retrieveUserChatHistory();
@@ -73,6 +84,7 @@ function login(event){
 			}
 		},
 		error: function ( jqXHR, textStatus, errorThrown) {
+			loginButton.innerHTML="Login";
 			var msg = "";
 			var jsonValue =  jqXHR.status;
 			if (jsonValue === 404) {
@@ -91,6 +103,7 @@ function login(event){
 }
 function handleChangePassword(event){
 	event.preventDefault();
+	var changepasswordsubmitButton = document.getElementById("changepasswordsubmit");
 	var password=document.getElementById("passwordchange").value;
 	var newpassword = document.getElementById("passwordnew").value;
 	var passwordnewconfirm = document.getElementById("passwordnewconfirm").value;
@@ -106,6 +119,7 @@ function handleChangePassword(event){
 		alert("Your current password matches new password.");
 		return;
 	}
+	changepasswordsubmitButton.innerHTML="<i class='fa fa-spinner fa-spin fa-2x fa-fw'></i>";
 	var passwordChangeEndPoint = BASE_URL+"/aaa/changepassword.json?changepassword="
 			+ userEmail
 			+ "&password="
@@ -121,6 +135,7 @@ function handleChangePassword(event){
 		jsonp: "callback",
 		crossDomain: true,
 		success: function (response) {
+			changepasswordsubmitButton.innerHTML="Change Password";
 			if(response.accepted){
 				logout();
 				alert(response.message + " Please login again");
@@ -133,6 +148,7 @@ function handleChangePassword(event){
 			}
 		},
 		error: function ( jqXHR, textStatus, errorThrown) {
+			changepasswordsubmitButton.innerHTML="Change Password";
 			var msg = "";
 			var jsonValue =  jqXHR.status;
 			if (jsonValue === 404) {
@@ -241,10 +257,12 @@ function persistSettings(){
 
 function saveOptions(e) {
 	e.preventDefault();
-	browser.storage.sync.set({
-		theme: document.querySelector("#theme").value
-	});
-
+	var nameOfSettingsChanged = e.target.name;
+	if(nameOfSettingsChanged === "theme"){
+		browser.storage.sync.set({
+			theme: document.querySelector("#theme").value
+		});
+	}
 }
 
 function createMyMessageHistory(message,timeString,msgId){
