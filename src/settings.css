@@ -1,0 +1,54 @@
+select {
+    width: 50%;
+    padding: 4px 4px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+    font-size: 16px;
+}
+
+option{
+    padding: 16px 20px;
+    border: none;
+    border-radius: 0px;
+    background-color: #f1f1f1;
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+    width: 30%;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: #4285f4;
+}
+
+input[type=text], input[type=password], input[type=email] {
+    width: 30%;
+    border: 2px solid #4285f4 ;
+    padding: 16px 5px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button{
+    text-align: center;
+    width: 30%;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: #4285f4;
+}
+
+.hide{
+    display: none;
+}

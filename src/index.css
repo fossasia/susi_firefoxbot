@@ -7,6 +7,27 @@ body{
   box-sizing: border-box;
 }
 
+.dark .empty-history{
+  background-color: #0ad5c1;
+  color: white;
+  margin: 15px;
+  margin-left: 60px;
+  margin-right: 60px;
+  padding: 6px;
+  border-radius: 40px;
+  text-align: center;
+}
+
+.empty-history{
+  background-color: #dbdbdb;
+  margin: 15px;
+  margin-left: 60px;
+  margin-right: 60px;
+  padding: 6px;
+  border-radius: 40px;
+  text-align: center;
+}
+
 .dark a:visited{
   color: #D22486;
 }
