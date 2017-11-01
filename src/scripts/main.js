@@ -13,6 +13,7 @@ var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
 var numberOfMessagesToLoad = 15;
 var isLogged = false;
 var accessToken = "";
+var emptyHistory = true;
 messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
@@ -112,6 +113,7 @@ function restoreMessages(){
 
 		if(res["messagesHistory"]){
 			messagesHistory = res["messagesHistory"];
+
 			for(var i = messagesHistory.length-numberOfMessagesToLoad; i < messagesHistory.length ;  i++){
 				$(messagesHistory[i]).appendTo(messagesHistoryElement);
 			}
@@ -130,6 +132,14 @@ function restoreMessages(){
 			},100);
 
 		}
+		else{
+			var htmlMsg="<div class='empty-history'> \
+	Start by saying \"Hi\"\
+	</div>";
+			$(htmlMsg).appendTo(messagesHistoryElement);
+
+		}
+
 		if(res["userMapObj"]){
 			userMapObj=res["userMapObj"];
 			for(var j=0;j<userMapObj.mapids.length;j++){
