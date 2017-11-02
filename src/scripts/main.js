@@ -3,6 +3,7 @@ var messageFormElement = document.getElementById("messageForm");
 var inputMessageElement = document.getElementById("inputMessage");
 var messagesHistoryElement = document.getElementById("messagesHistory");
 var loggedEmail = document.getElementById("loggedEmail");
+var scrollIconElement = document.getElementById("scrollIcon");
 var topBar = document.getElementById("nav");
 var messageCount=0;
 var messagesHistory=[];
@@ -41,9 +42,10 @@ buffer.then(function(res){
 
 });
 if(enableSync){
-//browser.storage.sync.clear(); //Uncomment the line and run the extension to clear the storage.
+//browser.storage.sync.clear();
+//Uncomment the line and run the extension to clear the storage.
 	document.addEventListener("DOMContentLoaded", restoreMessages);
-	messagesHistoryElement.addEventListener("scroll",loadMoreMessages);
+	messagesHistoryElement.addEventListener("scroll",handleScroll);
 }
 else{
 	getLocation();
@@ -63,7 +65,24 @@ settingsIcon.addEventListener("mouseout",function() {
 	settingsIcon.src="images/settings.svg";
 });
 
-function loadMoreMessages(){
+scrollIconElement.addEventListener("click",function(e){
+	$(messagesHistoryElement).stop().animate({
+		scrollTop: $(messagesHistoryElement)[0].scrollHeight
+	}, 800);
+	e.preventDefault();
+});
+function handleScroll(){
+	var scrollIcon = scrollIconElement;
+	var end=messagesHistoryElement.scrollHeight - messagesHistoryElement.scrollTop === messagesHistoryElement.clientHeight;
+	if(end){
+		//hide icon
+		scrollIcon.style.display="none";
+	}
+	else{
+		//show icon
+		scrollIcon.style.display="block";
+	}
+	// retrive history on scrolling
 	if(messagesHistoryElement.scrollTop == 0){
 		var startIndex;
 		var oldHeight = messagesHistoryElement.scrollHeight;
@@ -311,7 +330,7 @@ function createSusiMessageAnswer(message,timeString,msgId_susi){
 			return "<a href='"+link+"' target='_blank'>"+link+"</a>";
 		});
 	}
-	
+
 	var htmlMsg="<div class='message-box-susi message-susi'> \
 <div class='message-text'>"+message+"</div> \
 <div class='message-time'>"+timeString+"</div> \
