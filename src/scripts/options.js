@@ -173,6 +173,7 @@ function logout(){
 	browser.storage.sync.remove("messagesHistory");
 	browser.storage.sync.remove("userMapObj");
 	browser.storage.sync.remove("loggedUser");
+	accessToken = "";
 	showLoggedInBlock(false);
 }
 function applyUserSettings(){
@@ -259,11 +260,41 @@ function saveOptions(e) {
 	e.preventDefault();
 	var nameOfSettingsChanged = e.target.name;
 	if(nameOfSettingsChanged === "theme"){
+		// locally change the theme value
 		browser.storage.sync.set({
 			theme: document.querySelector("#theme").value
 		});
+		
+		//check if user is logged in
+		if(accessToken!=""){
+
+			var selectedtheme = document.querySelector("#theme").value;
+
+			var url = BASE_URL+"/aaa/changeUserSettings.json?key1=theme&value1="+selectedtheme+"&access_token="+accessToken+"&count=1";
+
+			// fire the api call to change settings value on server
+			$.ajax({
+
+				url: url,
+				dataType: "jsonp",
+				jsonpCallback: "q",
+				jsonp: "callback",
+				crossDomain: true,
+				success: function (response) {
+
+					alert("Theme updated successfuly.");
+
+				}
+
+			});
+
+		}
+		
+
 	}
+
 }
+
 
 function createMyMessageHistory(message,timeString,msgId){
 	var htmlMsg="<div class='message-container message-container-my' id='myMessage"+msgId+"'> \
