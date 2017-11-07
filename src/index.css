@@ -205,6 +205,11 @@ body{
   background: rgba(25,147,147,.2);
 
 }
+.table-view{
+  max-height: 220px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
 .scroll-icon{
     position: absolute;
     right: 20px;
@@ -292,8 +297,8 @@ body{
 }
 /*Map*/
 .map-div{
-    height: 180px;
-    width: 250px;
+  height: 180px;
+  width: 250px;
 }
 /*Input section*/
 .input-area{
@@ -360,8 +365,7 @@ body{
 
 .table-view table{
   width: 270px;
-   border-collapse: collapse;
-
+  border-collapse: collapse;
 }
 
 .table-view table tbody td{
