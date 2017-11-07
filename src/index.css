@@ -205,7 +205,17 @@ body{
   background: rgba(25,147,147,.2);
 
 }
-
+.scroll-icon{
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+    z-index: 9999;
+    bottom: 70px;
+    background-color: #ffffff;
+    padding: 0px 6px;
+    padding-top: 4px;
+    border-radius: 50%;
+}
 .message-time{
   font-size: 10px;
   color: #90a4ae;
