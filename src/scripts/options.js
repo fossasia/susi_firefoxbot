@@ -8,6 +8,12 @@ var loginButton = document.getElementById("loginbutton");
 var noLoggedInBlock = document.getElementById("nologgedin");
 var loggedInBlock = document.getElementById("loggedin");
 var changePasswordForm = document.getElementById("changepasswordform");
+var showLoginButton = document.getElementById("login-show-button");
+var loginContainer = document.getElementById("login-container");
+var hideLoginButton = document.getElementById("login-hide-button");
+var showChangePassButton = document.getElementById("change-pass-show-button");
+var changePassContainer = document.getElementById("change-pass-container");
+var hideChangePassButton = document.getElementById("change-pass-hide-button");
 var accessToken = "";
 var userEmail = "";
 var time = "" ;
@@ -21,7 +27,40 @@ changePasswordForm.addEventListener("submit", handleChangePassword);
 logoutButton.addEventListener("click", logout);
 clearMessageHistoryButton.addEventListener("click", clearMessageHistory);
 
+showLoginButton.addEventListener("click", showLoginForm);
+hideLoginButton.addEventListener("click", hideLoginForm);
+showChangePassButton.addEventListener("click", showChangePassForm);
+hideChangePassButton.addEventListener("click", hideChangePassForm);
+
 document.addEventListener("DOMContentLoaded", persistSettings);
+
+function showLoginForm(){
+	showLoginButton.style.display="none";
+	loginContainer.style.display="block";
+	hideLoginButton.style.display="block";
+
+}
+
+function hideLoginForm(){
+	showLoginButton.style.display="block";
+	loginContainer.style.display="none";
+	hideLoginButton.style.display="none";
+
+}
+
+function showChangePassForm(){
+	showChangePassButton.style.display="none";
+	changePassContainer.style.display="block";
+	hideChangePassButton.style.display="block";
+
+}
+
+function hideChangePassForm(){
+	showChangePassButton.style.display="block";
+	changePassContainer.style.display="none";
+	hideChangePassButton.style.display="none";
+
+}
 
 function showLoggedInBlock(show){
 	if(show){
