@@ -182,6 +182,8 @@ function restoreMessages(){
 				$(".input-area").addClass("dark");
 				$(".input-message").addClass("dark");
 				$(".material-icons").addClass("dark");
+				$(".scroll-icon-chevron").addClass("dark");
+				$(".scroll-icon").addClass("dark");
 
 			}
 			else{
@@ -193,6 +195,8 @@ function restoreMessages(){
 				$(".input-area").removeClass("dark");
 				$(".input-message").removeClass("dark");
 				$(".material-icons").removeClass("dark");
+				$("scroll-icon-chevron").removeClass("dark");
+				$("scroll-icon").removeClass("dark");
 			}
 		}
 		// extract from local memory
