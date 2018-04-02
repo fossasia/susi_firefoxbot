@@ -36,25 +36,33 @@ $ cd src
 6. Click on the icon and start interacting with SUSI.
 
 ## How to publish or summit your add-on to AMO(https://addons.mozilla.org/)
-1. go to https://addons.mozilla.org/en-US/firefox/ and register your account.
-
-2. click "Developer Hub" at up-right, then select "Summit your first Add-on" or "Summit a New Add-on"
-
-3. at "How to Distribute this Version" , choose "On this site" to make your firefox Add-on to public, or choose "On your own" to make this add-on private. 
-
-4. "Upload Version", before you update your add-on, we have to pack your add-on project as a file, like *.xpi or *.zip....., here we use "web-ext" to pack our add-on.
-
-5. check (https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext) to install web-ext, or simply type on your terminal or command line mode:
+1. before we publish our add-on, we need to pack our add-on as a file, please check (https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext) to install web-ext, or simply type on your terminal or command line:
    npm install --global web-ext
 
-6. go to folder of your add-on with manifest.json, in this case, we should go to susi_firefoxbot/src, test our add-on by typing:
+2. go to folder of your add-on with manifest.json, in this case, we should go to "susi_firefoxbot/src/", test our add-on by typing:
    web-ext run
 
-7. if succeeded, firefox will be opened and your add-on is shown on tray of add-on, you can test all function of your add-on in real firefox.  
+3. if succeeded, firefox will be opened, and your add-on is shown on tray of add-on, you can test all function of your add-on in real firefox.  
 
-8. to pack your add-on as a file, try to type:
+4. to pack your add-on as a file, try to type:
     web-ext build
 
-9. if build success, you will get a folder:"web-ext-artifacts" and file "susi_chatbot-1.0.zip" will be shown on it. the file name and version of "susi_chatbot-1.0.zip" is determined by manifest.json
+5. when "Your web extension is ready: " show up, your add-on is worked and ready to use. the file name and version of "susi_chatbot-1.0.zip" is determined by manifest.json, remember to modify manifest.json when version changed
 
-10. back to website of upload to AMO(https://addons.mozilla.org/en-US/developers/addon/submit/upload-unlisted)
+
+6. go to https://addons.mozilla.org/en-US/firefox/ and register your AMO account.
+
+7. click "Developer Hub" at up-right, then select "Summit your first Add-on" or "Summit a New Add-on"
+
+8. at "How to Distribute this Version" , choose "On this site" to make your firefox Add-on to public, or choose "On your own" to make this add-on private. now we choose "On your own" for our test project.
+
+9. at "Upload Version", select the packed file at "susi_firefoxbot/src/web-ext-artifacts/susi_chatbot-1.0.zip" to upload. orginially, firefox's add-on support *.xpi, but now AMO can support *.xpi and *.zip.
+
+10. AMO will check and verify your add-on, it will tell you when error happened. otherwise, you should get the success message like:"Your add-on was validated with no errors and xx warnings. Your submission will be automatically signed." 
+
+11. if no problem, check support platform at "which platforms is this file compatible with", default is All Platforms.
+
+12. click [Sign Add-on], your add-on will be signed, and you can download your add-on: "susi_chatbot-1.0-an+fx.xpi" to backup or send it to your friends, 
+
+13. if you select "On this site" at step 8. ,please describe your add-on with more detail information, and click [Sumbmit Version], your add-on will publish to global immediately, everyone can search your addon at AMO search bar
+
