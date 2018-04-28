@@ -19,7 +19,14 @@ messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
 });
-
+function hideScrollButton(){
+	scrollIconElement.style.display="none";
+}
+function showScrollButton(){
+	scrollIconElement.style.display="block";
+}
+//hide scroll button by default
+hideScrollButton();
 // initialization based on cache status
 var buffer = browser.storage.sync.get(null);
 buffer.then(function(res){
@@ -76,11 +83,11 @@ function handleScroll(){
 	var end=messagesHistoryElement.scrollHeight - messagesHistoryElement.scrollTop === messagesHistoryElement.clientHeight;
 	if(end){
 		//hide icon
-		scrollIcon.style.display="none";
+		hideScrollButton();
 	}
 	else{
 		//show icon
-		scrollIcon.style.display="block";
+		showScrollButton();
 	}
 	// retrive history on scrolling
 	if(messagesHistoryElement.scrollTop == 0){
