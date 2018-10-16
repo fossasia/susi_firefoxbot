@@ -29,7 +29,7 @@ $ cd src
 ```
 
 1. Clone this repository.
-2. Open `about:debugging` on Mozilla Firefox.
+2. Open `about:debugging` on Mozilla firefox.
 3. Enable add-on debugging.
 4. Load temporary-addon from `src` folder.
 5. You will see an icon on the firefox's toolbar.
