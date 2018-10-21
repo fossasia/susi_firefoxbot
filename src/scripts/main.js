@@ -9,8 +9,10 @@ var messageCount=0;
 var messagesHistory=[];
 var enableSync=true;// set false for testing purpose
 var theme = "light"; //default
-var settingsIcon = document.getElementById("settingsIcon");
+var settings = document.getElementById("settings");
+var seticon = document.getElementById("seticon");
 var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
+var clearchat= document.getElementById("clearchathistory");
 var numberOfMessagesToLoad = 15;
 var isLogged = false;
 var accessToken = "";
@@ -25,6 +27,8 @@ function hideScrollButton(){
 function showScrollButton(){
 	scrollIconElement.style.display="block";
 }
+clearchat.addEventListener("click", clearMessageHistory);
+
 //hide scroll button by default
 hideScrollButton();
 // initialization based on cache status
@@ -58,19 +62,19 @@ else{
 	getLocation();
 }
 
-settingsIcon.addEventListener("click", function() {
+settings.addEventListener("click", function() {
 	browser.runtime.openOptionsPage();
 });
 
-settingsIcon.addEventListener("mouseover",function() {
-	$(".settings-icon").css("cursor","pointer");
-	settingsIcon.src="images/settings-hover.svg";
+seticon.addEventListener("mouseover",function() {
+	
+	seticon.src="images/settings-hover.svg";
+});
+seticon.addEventListener("mouseout",function() {
+	
+	seticon.src="images/settings.svg";
 });
 
-settingsIcon.addEventListener("mouseout",function() {
-	$(".settings-icon").css("cursor","auto");
-	settingsIcon.src="images/settings.svg";
-});
 
 scrollIconElement.addEventListener("click",function(e){
 	$(messagesHistoryElement).stop().animate({
@@ -132,6 +136,8 @@ function handleScroll(){
 		});
 	}
 }
+
+
 
 function restoreMessages(){
 	var buffer = browser.storage.sync.get(null);
@@ -613,6 +619,15 @@ function composeResponse(data,currentTimeString,msgId_susi){
 		}
 	}
 }
+
+function clearMessageHistory(){
+	
+	//clears messages stored in browser
+	browser.storage.sync.remove("messagesHistory");
+	browser.storage.sync.remove("userMapObj");
+
+}
+
 
 setTimeout(function(){
 	$("#inputMessage").focus();
