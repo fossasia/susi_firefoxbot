@@ -570,6 +570,9 @@ function composeResponse(data,currentTimeString,msgId_susi){
 			expression=action.expression;
 			if(expression){
 				createSusiMessageAnswer(expression,currentTimeString,msgId);
+				var synth = window.speechSynthesis;
+				var utterThis = new SpeechSynthesisUtterance(expression);
+				synth.speak(utterThis);
 				applyTheme();
 			}
 		}
