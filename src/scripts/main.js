@@ -584,7 +584,7 @@ function composeResponse(data, currentTimeString, msgId_susi) {
 				var synth = window.speechSynthesis;
 				var utterThis = new SpeechSynthesisUtterance(expression);
 				synth.speak(utterThis);
-        applyTheme();
+				applyTheme();
 			}
 		}
 		else if (type === "video_play") {
