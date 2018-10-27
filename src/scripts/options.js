@@ -319,30 +319,23 @@ function saveOptions(e) {
 		});
 
 		//check if user is logged in
-		if(accessToken!=""){
-
+		if(accessToken != ""){
 			var selectedtheme = document.querySelector("#theme").value;
 
 			var themeUrl = BASE_URL+"/aaa/changeUserSettings.json?key1=theme&value1="+selectedtheme+"&access_token="+accessToken+"&count=1";
 
 			// fire the api call to change settings value on server
 			$.ajax({
-
 				url: themeUrl,
 				dataType: "jsonp",
 				jsonpCallback: "q",
 				jsonp: "callback",
 				crossDomain: true,
 				success: function (response) {
-
 					alert("Theme updated successfuly.");
-
 				}
-
 			});
-
 		}
-
 	}
 	else if(nameOfSettingsChanged === "top-bar-color"){
 		browser.storage.sync.set({
@@ -351,7 +344,6 @@ function saveOptions(e) {
 
 		//check if user is logged in
 		if (accessToken != "") {
-
 			var selectedTopBarColor = document.querySelector("#top-bar-color").value;
 
 			var topBarUrl = BASE_URL + "/aaa/changeUserSettings.json?key1=topBarColor&value1=" + selectedTopBarColor + 
@@ -359,20 +351,15 @@ function saveOptions(e) {
 
 			// fire the api call to change settings value on server
 			$.ajax({
-
 				url: topBarUrl,
 				dataType: "jsonp",
 				jsonpCallback: "q",
 				jsonp: "callback",
 				crossDomain: true,
 				success: function (response) {
-
 					alert("Top bar color updated successfuly.");
-
 				}
-
 			});
-
 		}
 	}
 	else if (nameOfSettingsChanged === "message-pane-color") {
@@ -382,7 +369,6 @@ function saveOptions(e) {
 
 		//check if user is logged in
 		if (accessToken != "") {
-
 			var selectedMessagePaneColor = document.querySelector("#message-pane-color").value;
 
 			var messagePaneUrl = BASE_URL + "/aaa/changeUserSettings.json?key1=messagePaneColor&value1=" + selectedMessagePaneColor +
@@ -390,20 +376,15 @@ function saveOptions(e) {
 
 			// fire the api call to change settings value on server
 			$.ajax({
-
 				url: messagePaneUrl,
 				dataType: "jsonp",
 				jsonpCallback: "q",
 				jsonp: "callback",
 				crossDomain: true,
 				success: function (response) {
-
 					alert("Message pane color updated successfuly.");
-
 				}
-
 			});
-
 		}
 	}
 }
