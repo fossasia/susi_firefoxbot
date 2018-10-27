@@ -323,12 +323,12 @@ function saveOptions(e) {
 
 			var selectedtheme = document.querySelector("#theme").value;
 
-			var url = BASE_URL+"/aaa/changeUserSettings.json?key1=theme&value1="+selectedtheme+"&access_token="+accessToken+"&count=1";
+			var themeUrl = BASE_URL+"/aaa/changeUserSettings.json?key1=theme&value1="+selectedtheme+"&access_token="+accessToken+"&count=1";
 
 			// fire the api call to change settings value on server
 			$.ajax({
 
-				url: url,
+				url: themeUrl,
 				dataType: "jsonp",
 				jsonpCallback: "q",
 				jsonp: "callback",
@@ -354,13 +354,13 @@ function saveOptions(e) {
 
 			var selectedTopBarColor = document.querySelector("#top-bar-color").value;
 
-			var url = BASE_URL + "/aaa/changeUserSettings.json?key1=topBarColor&value1=" + selectedTopBarColor + 
+			var topBarUrl = BASE_URL + "/aaa/changeUserSettings.json?key1=topBarColor&value1=" + selectedTopBarColor + 
 				"&access_token=" + accessToken + "&count=1";
 
 			// fire the api call to change settings value on server
 			$.ajax({
 
-				url: url,
+				url: topBarUrl,
 				dataType: "jsonp",
 				jsonpCallback: "q",
 				jsonp: "callback",
@@ -385,13 +385,13 @@ function saveOptions(e) {
 
 			var selectedMessagePaneColor = document.querySelector("#message-pane-color").value;
 
-			var url = BASE_URL + "/aaa/changeUserSettings.json?key1=messagePaneColor&value1=" + selectedMessagePaneColor +
+			var messagePaneUrl = BASE_URL + "/aaa/changeUserSettings.json?key1=messagePaneColor&value1=" + selectedMessagePaneColor +
 				"&access_token=" + accessToken + "&count=1";
 
 			// fire the api call to change settings value on server
 			$.ajax({
 
-				url: url,
+				url: messagePaneUrl,
 				dataType: "jsonp",
 				jsonpCallback: "q",
 				jsonp: "callback",
