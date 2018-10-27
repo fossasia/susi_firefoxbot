@@ -9,6 +9,8 @@ var messageCount = 0;
 var messagesHistory = [];
 var enableSync = true;// set false for testing purpose
 var theme = "light"; //default
+var topBarColor = "default";
+var messagePaneColor = "default";
 var settings = document.getElementById("settings");
 var seticon = document.getElementById("seticon");
 var userMapObj = { latitude: null, longitude: null, status: null, mapids: [] };
@@ -186,31 +188,16 @@ function restoreMessages() {
 		}
 		//set the theme
 		if (res["theme"]) {
-			if (res["theme"] == "dark") {
-				theme = res["theme"];
-				$(".top-bar").addClass("dark");
-				$(".messages-history").addClass("dark");
-				$(".message-box").addClass("dark");
-				$(".message-box-susi").addClass("dark");
-				$(".input-area").addClass("dark");
-				$(".input-message").addClass("dark");
-				$(".material-icons").addClass("dark");
-				$(".scroll-icon-chevron").addClass("dark");
-				$(".scroll-icon").addClass("dark");
-
-			}
-			else {
-				theme = res["theme"];
-				$(".top-bar").removeClass("dark");
-				$(".messages-history").removeClass("dark");
-				$(".message-box").removeClass("dark");
-				$(".message-box-susi").removeClass("dark");
-				$(".input-area").removeClass("dark");
-				$(".input-message").removeClass("dark");
-				$(".material-icons").removeClass("dark");
-				$("scroll-icon-chevron").removeClass("dark");
-				$("scroll-icon").removeClass("dark");
-			}
+			theme = res["theme"];
+			applyTheme();
+		}
+		if (res["topBarColor"]) {
+			topBarColor = res["topBarColor"];
+			applyTheme();
+		}
+		if (res["messagePaneColor"]) {
+			messagePaneColor = res["messagePaneColor"];
+			applyTheme();
 		}
 		// extract from local memory
 		var bufferLocal = browser.storage.local.get(null);
@@ -246,6 +233,15 @@ function applyTheme() {
 		$(".input-area").removeClass("dark");
 		$(".input-message").removeClass("dark");
 		$(".material-icons").removeClass("dark");
+	}
+
+	if (topBarColor != "default") {
+		$(".top-bar").removeClass("dark");
+		$(".top-bar").css("backgroundColor", topBarColor);
+	}
+	if (messagePaneColor != "default") {
+		$(".messages-history").removeClass("dark");
+		$(".messages-history").css("backgroundColor", messagePaneColor);
 	}
 }
 
