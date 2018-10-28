@@ -283,11 +283,10 @@ function persistSettings(){
 	var buffer = browser.storage.sync.get(null);
 	buffer.then(function(res){
 		if(res["theme"]){
-			if(res["theme"]=="dark"){
-				$("#theme").val("dark");
-			}
-			else{
-				$("#theme").val("light");
+			$("#theme").val(res["theme"]);
+			if(res["theme"] != "custom"){
+				$("#top-bar-color").prop("disabled", true);
+				$("#message-pane-color").prop("disabled", true);
 			}
 		}
 		if(res["topBarColor"]){
@@ -314,14 +313,22 @@ function saveOptions(e) {
 	var nameOfSettingsChanged = e.target.name;
 	if(nameOfSettingsChanged === "theme"){
 		// locally change the theme value
+		var selectedtheme = document.querySelector("#theme").value;
 		browser.storage.sync.set({
-			theme: document.querySelector("#theme").value
+			theme: selectedtheme
 		});
+
+		if(selectedtheme !== "custom"){
+			topBarColorSelect.disabled = true;
+			messagePaneColorSelect.disabled = true;
+		}
+		else {
+			topBarColorSelect.disabled = false;
+			messagePaneColorSelect.disabled = false;
+		}
 
 		//check if user is logged in
 		if(accessToken != ""){
-			var selectedtheme = document.querySelector("#theme").value;
-
 			var themeUrl = BASE_URL+"/aaa/changeUserSettings.json?key1=theme&value1="+selectedtheme+"&access_token="+accessToken+"&count=1";
 
 			// fire the api call to change settings value on server
@@ -337,15 +344,14 @@ function saveOptions(e) {
 			});
 		}
 	}
-	else if(nameOfSettingsChanged === "top-bar-color"){
+	else if (nameOfSettingsChanged === "top-bar-color") {
+		var selectedTopBarColor = document.querySelector("#top-bar-color").value;
 		browser.storage.sync.set({
-			topBarColor: document.querySelector("#top-bar-color").value
+			topBarColor: selectedTopBarColor
 		});
 
 		//check if user is logged in
 		if (accessToken != "") {
-			var selectedTopBarColor = document.querySelector("#top-bar-color").value;
-
 			var topBarUrl = BASE_URL + "/aaa/changeUserSettings.json?key1=topBarColor&value1=" + selectedTopBarColor + 
 				"&access_token=" + accessToken + "&count=1";
 
@@ -363,14 +369,13 @@ function saveOptions(e) {
 		}
 	}
 	else if (nameOfSettingsChanged === "message-pane-color") {
+		var selectedMessagePaneColor = document.querySelector("#message-pane-color").value;
 		browser.storage.sync.set({
-			messagePaneColor: document.querySelector("#message-pane-color").value
+			messagePaneColor: selectedMessagePaneColor
 		});
 
 		//check if user is logged in
 		if (accessToken != "") {
-			var selectedMessagePaneColor = document.querySelector("#message-pane-color").value;
-
 			var messagePaneUrl = BASE_URL + "/aaa/changeUserSettings.json?key1=messagePaneColor&value1=" + selectedMessagePaneColor +
 				"&access_token=" + accessToken + "&count=1";
 

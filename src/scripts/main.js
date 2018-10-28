@@ -9,8 +9,8 @@ var messageCount = 0;
 var messagesHistory = [];
 var enableSync = true;// set false for testing purpose
 var theme = "light"; //default
-var topBarColor = "default";
-var messagePaneColor = "default";
+var topBarColor = "light";
+var messagePaneColor = "light";
 var settings = document.getElementById("settings");
 var seticon = document.getElementById("seticon");
 var userMapObj = { latitude: null, longitude: null, status: null, mapids: [] };
@@ -225,7 +225,7 @@ function applyTheme() {
 		$(".input-message").addClass("dark");
 		$(".material-icons").addClass("dark");
 	}
-	else {
+	else if (theme == "light") {
 		$(".top-bar").removeClass("dark");
 		$(".messages-history").removeClass("dark");
 		$(".message-box").removeClass("dark");
@@ -235,29 +235,34 @@ function applyTheme() {
 		$(".input-message").removeClass("dark");
 		$(".material-icons").removeClass("dark");
 	}
+	else {
+		if(topBarColor == "dark") {
+			$(".top-bar").addClass("dark");
+			$(".material-icons").addClass("dark");
+		}
+		else {
+			$(".top-bar").removeClass("dark");
+			$(".material-icons").removeClass("dark");
 
-	if (topBarColor != "default") {
-		$(".top-bar").removeClass("dark");
-		$(".top-bar").css("backgroundColor", topBarColor);
-	}
-	if (messagePaneColor != "default") {
-		$(".messages-history").removeClass("dark");
-		$(".messages-history").css("backgroundColor", messagePaneColor);
-		
-		// Remove alpha from message boxes
-		var newAlpha = 1.0;
+			if(topBarColor != "light") {
+				$(".top-bar").css("backgroundColor", topBarColor);
+				$(".material-icons").css("color", topBarColor);
+			}
+		}
 
-		var bg1 = $(".message-box").css("backgroundColor");
-		var components1 = bg1.startsWith("rgba") ? bg1.slice(5).split(",") : bg1.slice(4).split(",");
-		var newColor1 = "rgba(" + components1[0] + "," + parseInt(components1[1]) + "," + 
-			parseInt(components1[2]) + "," + newAlpha + ")";
-		$(".message-box").css("backgroundColor", newColor1);
+		if (messagePaneColor == "dark") {
+			$(".messages-history").addClass("dark");
+			$(".input-area").addClass("dark");
+		}
+		else {
+			$(".messages-history").removeClass("dark");
+			$(".input-area").removeClass("dark");
 
-		var bg2 = $(".message-box-susi").css("backgroundColor");
-		var components2 = bg2.startsWith("rgba") ? bg2.slice(5).split(",") : bg2.slice(4).split(",");
-		var newColor2 = "rgba(" + components2[0] + "," + parseInt(components2[1]) + "," + 
-			parseInt(components2[2]) + "," + newAlpha + ")";
-		$(".message-box-susi").css("backgroundColor", newColor2);
+			if(messagePaneColor != "light") {
+				$(".messages-history").css("backgroundColor", messagePaneColor);
+				$(".input-area").css("backgroundColor", messagePaneColor);
+			}
+		}
 	}
 }
 
