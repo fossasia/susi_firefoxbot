@@ -220,16 +220,17 @@ function applyTheme() {
 		$(".messages-history").addClass("dark");
 		$(".message-box").addClass("dark");
 		$(".message-box-susi").addClass("dark");
+		$(".message-time").addClass("dark");
 		$(".input-area").addClass("dark");
 		$(".input-message").addClass("dark");
 		$(".material-icons").addClass("dark");
-
 	}
 	else {
 		$(".top-bar").removeClass("dark");
 		$(".messages-history").removeClass("dark");
 		$(".message-box").removeClass("dark");
 		$(".message-box-susi").removeClass("dark");
+		$(".message-time").removeClass("dark");
 		$(".input-area").removeClass("dark");
 		$(".input-message").removeClass("dark");
 		$(".material-icons").removeClass("dark");

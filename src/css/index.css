@@ -255,6 +255,12 @@ body{
   font-size: 10px;
   color: #90a4ae;
 }
+
+.message-time.dark{
+  background-color: transparent;
+  color: #dbdbdb;
+}
+
 .message-container-susi .loading{
   height: 10px;
   width: auto;
