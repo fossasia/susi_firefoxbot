@@ -163,9 +163,8 @@ body{
 
 .message-box.dark{
   background: rgba(25,147,147,.2);
-  color: #0ad5c1;
+  color: #20e9d5;
   border:none;
-
 }
 
 .message-box-susi{
@@ -196,9 +195,8 @@ body{
 
 .message-box-susi.dark{
   background: rgba(25,147,147,.2);
-  color: #0ec879;
+  color: #51ffb7;
   border:none;
-
 }
 
 
