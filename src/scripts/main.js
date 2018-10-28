@@ -246,17 +246,17 @@ function applyTheme() {
 		// Remove alpha from message boxes
 		var newAlpha = 1.0;
 
-		var bg1 = $('.message-box').css('backgroundColor');
-		var components1 = bg1.startsWith("rgba") ? bg1.slice(5).split(',') : bg1.slice(4).split(',');
-		var newColor1 = 'rgba(' + components1[0] + ',' + parseInt(components1[1]) + ',' + 
-			parseInt(components1[2]) + ',' + newAlpha + ')';
-		$('.message-box').css('backgroundColor', newColor1);
+		var bg1 = $(".message-box").css("backgroundColor");
+		var components1 = bg1.startsWith("rgba") ? bg1.slice(5).split(",") : bg1.slice(4).split(",");
+		var newColor1 = "rgba(" + components1[0] + "," + parseInt(components1[1]) + "," + 
+			parseInt(components1[2]) + "," + newAlpha + ")";
+		$(".message-box").css("backgroundColor", newColor1);
 
-		var bg2 = $('.message-box-susi').css('backgroundColor');
-		var components2 = bg2.startsWith("rgba") ? bg2.slice(5).split(',') : bg2.slice(4).split(',');
-		var newColor2 = 'rgba(' + components2[0] + ',' + parseInt(components2[1]) + ',' + 
-			parseInt(components2[2]) + ',' + newAlpha + ')';
-		$('.message-box-susi').css('backgroundColor', newColor2);
+		var bg2 = $(".message-box-susi").css("backgroundColor");
+		var components2 = bg2.startsWith("rgba") ? bg2.slice(5).split(",") : bg2.slice(4).split(",");
+		var newColor2 = "rgba(" + components2[0] + "," + parseInt(components2[1]) + "," + 
+			parseInt(components2[2]) + "," + newAlpha + ")";
+		$(".message-box-susi").css("backgroundColor", newColor2);
 	}
 }
 
