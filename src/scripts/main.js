@@ -5,14 +5,16 @@ var messagesHistoryElement = document.getElementById("messagesHistory");
 var loggedEmail = document.getElementById("loggedEmail");
 var scrollIconElement = document.getElementById("scrollIcon");
 var topBar = document.getElementById("nav");
-var messageCount=0;
-var messagesHistory=[];
-var enableSync=true;// set false for testing purpose
+var messageCount = 0;
+var messagesHistory = [];
+var enableSync = true;// set false for testing purpose
 var theme = "light"; //default
 var settings = document.getElementById("settings");
 var seticon = document.getElementById("seticon");
-var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
-var clearchat= document.getElementById("clearchathistory");
+var userMapObj = { latitude: null, longitude: null, status: null, mapids: [] };
+var clearchat = document.getElementById("clearchathistory");
+var login = document.getElementById("loggedIn");
+var logout = document.getElementById("loggedOut");
 var numberOfMessagesToLoad = 15;
 var isLogged = false;
 var accessToken = "";
@@ -21,11 +23,11 @@ messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
 });
-function hideScrollButton(){
-	scrollIconElement.style.display="none";
+function hideScrollButton() {
+	scrollIconElement.style.display = "none";
 }
-function showScrollButton(){
-	scrollIconElement.style.display="block";
+function showScrollButton() {
+	scrollIconElement.style.display = "block";
 }
 clearchat.addEventListener("click", clearMessageHistory);
 
@@ -33,81 +35,97 @@ clearchat.addEventListener("click", clearMessageHistory);
 hideScrollButton();
 // initialization based on cache status
 var buffer = browser.storage.sync.get(null);
-buffer.then(function(res){
+buffer.then(function (res) {
 	//to show the logged in email
-	if(res["loggedUser"]){
-		topBar.style.height="14%";
-		messagesHistoryElement.style.height="73%";
-		loggedEmail.style.display="inline";
-		loggedEmail.innerText=res["loggedUser"].email;
+	if (res["loggedUser"]) {
+		topBar.style.height = "14%";
+		messagesHistoryElement.style.height = "73%";
+		loggedEmail.style.display = "inline";
+		loggedEmail.innerText = res["loggedUser"].email;
 		isLogged = true;
 		accessToken = res["loggedUser"].accessToken;
+		document.getElementById("loggedIn").style.display = "none";
+		document.getElementById("loggedOut").style.display = "block";
 
 	}
-	else{
-		topBar.style.height="12%";
-		messagesHistoryElement.style.height="75%";
-		loggedEmail.style.display="none";
-		loggedEmail.innerText="";
+	else {
+		topBar.style.height = "12%";
+		messagesHistoryElement.style.height = "75%";
+		loggedEmail.style.display = "none";
+		loggedEmail.innerText = "";
+		document.getElementById("loggedIn").style.display = "block";
+		document.getElementById("loggedOut").style.display = "none";
+
 	}
 
 });
-if(enableSync){
-//browser.storage.sync.clear();
-//Uncomment the line and run the extension to clear the storage.
+if (enableSync) {
+	//browser.storage.sync.clear();
+	//Uncomment the line and run the extension to clear the storage.
 	document.addEventListener("DOMContentLoaded", restoreMessages);
-	messagesHistoryElement.addEventListener("scroll",handleScroll);
+	messagesHistoryElement.addEventListener("scroll", handleScroll);
 }
-else{
+else {
 	getLocation();
 }
 
-settings.addEventListener("click", function() {
+settings.addEventListener("click", function () {
 	browser.runtime.openOptionsPage();
 });
 
-seticon.addEventListener("mouseover",function() {
-	
-	seticon.src="images/settings-hover.svg";
-});
-seticon.addEventListener("mouseout",function() {
-	
-	seticon.src="images/settings.svg";
+logout.addEventListener("click", function () {
+	browser.storage.sync.remove("messagesHistory");
+	browser.storage.sync.remove("userMapObj");
+	browser.storage.sync.remove("loggedUser");
+	accessToken = "";
+	document.getElementById("loggedIn").style.display = "block";
+	document.getElementById("loggedOut").style.display = "none";
 });
 
+login.addEventListener("click", function () {
+	browser.runtime.openOptionsPage();
+});
 
-scrollIconElement.addEventListener("click",function(e){
+seticon.addEventListener("mouseover", function () {
+	seticon.src = "images/settings-hover.svg";
+});
+seticon.addEventListener("mouseout", function () {
+
+	seticon.src = "images/settings.svg";
+});
+
+scrollIconElement.addEventListener("click", function (e) {
 	$(messagesHistoryElement).stop().animate({
 		scrollTop: $(messagesHistoryElement)[0].scrollHeight
 	}, 800);
 	e.preventDefault();
 });
-function handleScroll(){
+function handleScroll() {
 	var scrollIcon = scrollIconElement;
-	var end=messagesHistoryElement.scrollHeight - messagesHistoryElement.scrollTop === messagesHistoryElement.clientHeight;
-	if(end){
+	var end = messagesHistoryElement.scrollHeight - messagesHistoryElement.scrollTop === messagesHistoryElement.clientHeight;
+	if (end) {
 		//hide icon
 		hideScrollButton();
 	}
-	else{
+	else {
 		//show icon
 		showScrollButton();
 	}
 	// retrive history on scrolling
-	if(messagesHistoryElement.scrollTop == 0){
+	if (messagesHistoryElement.scrollTop == 0) {
 		var startIndex;
 		var oldHeight = messagesHistoryElement.scrollHeight;
 		var buffer = browser.storage.sync.get(null);
-		buffer.then(function(res){
-			if(res["messagesHistory"]){
+		buffer.then(function (res) {
+			if (res["messagesHistory"]) {
 				messagesHistory = res["messagesHistory"];
-				if(messagesHistoryElement.children.length < messagesHistory.length){
+				if (messagesHistoryElement.children.length < messagesHistory.length) {
 					startIndex = messagesHistory.length - messagesHistoryElement.children.length - 1;
 					var endIndex = startIndex - numberOfMessagesToLoad;
-					if(endIndex < 0){
+					if (endIndex < 0) {
 						endIndex = 0;
 					}
-					for(var i = startIndex ; i >= endIndex;  i--){
+					for (var i = startIndex; i >= endIndex; i--) {
 						$(messagesHistory[i]).prependTo(messagesHistoryElement);
 					}
 				}
@@ -115,23 +133,23 @@ function handleScroll(){
 			applyTheme();
 			var newHeight = messagesHistoryElement.scrollHeight;
 			messagesHistoryElement.scrollTop = newHeight - oldHeight;
-			if(res["userMapObj"]){
-				userMapObj=res["userMapObj"];
-				for(var j=0;j<userMapObj.mapids.length;j++){
-					var mapSingle=userMapObj.mapids[j];
-					if((parseInt(mapSingle.msgId.split("p")[1]) < startIndex) && $("#"+mapSingle.msgId).length>0){
-						initiateMap(mapSingle.msgId,mapSingle.latitude,mapSingle.longitude,mapSingle.zoom);
+			if (res["userMapObj"]) {
+				userMapObj = res["userMapObj"];
+				for (var j = 0; j < userMapObj.mapids.length; j++) {
+					var mapSingle = userMapObj.mapids[j];
+					if ((parseInt(mapSingle.msgId.split("p")[1]) < startIndex) && $("#" + mapSingle.msgId).length > 0) {
+						initiateMap(mapSingle.msgId, mapSingle.latitude, mapSingle.longitude, mapSingle.zoom);
 					}
 				}
 			}
 			$(".content-slick").slick({
-				slidesToShow:1,
-				centerMode:true,
-				centerPadding:"20px",
-				arrows:true,
-				dots:false,
-				infinite:true,
-				dotsClass:"slick-dots slick-dots-ul",
+				slidesToShow: 1,
+				centerMode: true,
+				centerPadding: "20px",
+				arrows: true,
+				dots: false,
+				infinite: true,
+				dotsClass: "slick-dots slick-dots-ul",
 			});
 		});
 	}
@@ -139,54 +157,54 @@ function handleScroll(){
 
 
 
-function restoreMessages(){
+function restoreMessages() {
 	var buffer = browser.storage.sync.get(null);
-	buffer.then(function(res){
+	buffer.then(function (res) {
 
-		if(res["messagesHistory"]){
+		if (res["messagesHistory"]) {
 			messagesHistory = res["messagesHistory"];
 
-			for(var i = messagesHistory.length-numberOfMessagesToLoad; i < messagesHistory.length ;  i++){
+			for (var i = messagesHistory.length - numberOfMessagesToLoad; i < messagesHistory.length; i++) {
 				$(messagesHistory[i]).appendTo(messagesHistoryElement);
 			}
 			$(".content-slick").slick({
-				slidesToShow:1,
-				centerMode:true,
-				centerPadding:"20px",
-				arrows:true,
-				dots:false,
-				infinite:true,
-				dotsClass:"slick-dots slick-dots-ul",
+				slidesToShow: 1,
+				centerMode: true,
+				centerPadding: "20px",
+				arrows: true,
+				dots: false,
+				infinite: true,
+				dotsClass: "slick-dots slick-dots-ul",
 
 			});
-			setTimeout(function(){
+			setTimeout(function () {
 				messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;// to apply styles on the dynamic slider
-			},100);
+			}, 100);
 
 		}
-		else{
-			var htmlMsg="<div class='empty-history'> \
+		else {
+			var htmlMsg = "<div class='empty-history'> \
 	Start by saying \"Hi\"\
 	</div>";
 			$(htmlMsg).appendTo(messagesHistoryElement);
 
 		}
 
-		if(res["userMapObj"]){
-			userMapObj=res["userMapObj"];
-			for(var j=0;j<userMapObj.mapids.length;j++){
-				var mapSingle=userMapObj.mapids[j];
-				if($("#"+mapSingle.msgId).length>0){
-					initiateMap(mapSingle.msgId,mapSingle.latitude,mapSingle.longitude,mapSingle.zoom);
+		if (res["userMapObj"]) {
+			userMapObj = res["userMapObj"];
+			for (var j = 0; j < userMapObj.mapids.length; j++) {
+				var mapSingle = userMapObj.mapids[j];
+				if ($("#" + mapSingle.msgId).length > 0) {
+					initiateMap(mapSingle.msgId, mapSingle.latitude, mapSingle.longitude, mapSingle.zoom);
 				}
 			}
 		}
-		else{
+		else {
 			getLocation();
 		}
 		//set the theme
-		if(res["theme"]){
-			if(res["theme"]=="dark"){
+		if (res["theme"]) {
+			if (res["theme"] == "dark") {
 				theme = res["theme"];
 				$(".top-bar").addClass("dark");
 				$(".messages-history").addClass("dark");
@@ -199,7 +217,7 @@ function restoreMessages(){
 				$(".scroll-icon").addClass("dark");
 
 			}
-			else{
+			else {
 				theme = res["theme"];
 				$(".top-bar").removeClass("dark");
 				$(".messages-history").removeClass("dark");
@@ -214,11 +232,11 @@ function restoreMessages(){
 		}
 		// extract from local memory
 		var bufferLocal = browser.storage.local.get(null);
-		bufferLocal.then(function(res){
+		bufferLocal.then(function (res) {
 			// search for a query selected by Context Menu
-			if(res["contextQuery"]){
-				var query = res["contextQuery"] ;
-				inputMessageElement.value=query;
+			if (res["contextQuery"]) {
+				var query = res["contextQuery"];
+				inputMessageElement.value = query;
 				document.getElementById("inputSubmit").click();
 				browser.storage.local.remove("contextQuery");
 			}
@@ -227,8 +245,8 @@ function restoreMessages(){
 	});
 }
 
-function applyTheme(){
-	if(theme=="dark"){
+function applyTheme() {
+	if (theme == "dark") {
 		$(".top-bar").addClass("dark");
 		$(".messages-history").addClass("dark");
 		$(".message-box").addClass("dark");
@@ -238,7 +256,7 @@ function applyTheme(){
 		$(".material-icons").addClass("dark");
 
 	}
-	else{
+	else {
 		$(".top-bar").removeClass("dark");
 		$(".messages-history").removeClass("dark");
 		$(".message-box").removeClass("dark");
@@ -249,48 +267,48 @@ function applyTheme(){
 	}
 }
 
-function handleMessageInputSubmit(){
-	var message=inputMessageElement.value;
-	message=message.trim();
-	inputMessageElement.value="";
-	if(message===""){
+function handleMessageInputSubmit() {
+	var message = inputMessageElement.value;
+	message = message.trim();
+	inputMessageElement.value = "";
+	if (message === "") {
 		return 0;
 	}
-	else{
-		var currentTimeString=getCurrentTimeString();
-		var msgId=messagesHistory.length;
-		createMyMessage(message,currentTimeString,msgId);
+	else {
+		var currentTimeString = getCurrentTimeString();
+		var msgId = messagesHistory.length;
+		createMyMessage(message, currentTimeString, msgId);
 	}
 
 }
 
 function getCurrentTimeString() {
-	var ampm="AM";
-	var currentDate=new Date();
-	var hours=currentDate.getHours();
-	var minutes=currentDate.getMinutes();
-	var time="";
-	if(hours>12){
-		ampm="PM";
-		hours-=12;
+	var ampm = "AM";
+	var currentDate = new Date();
+	var hours = currentDate.getHours();
+	var minutes = currentDate.getMinutes();
+	var time = "";
+	if (hours > 12) {
+		ampm = "PM";
+		hours -= 12;
 	}
-	if(hours===12){
-		ampm="PM";
+	if (hours === 12) {
+		ampm = "PM";
 	}
-	if(minutes<10){
-		minutes="0"+minutes;
+	if (minutes < 10) {
+		minutes = "0" + minutes;
 	}
-	time=hours+":"+minutes+" "+ampm;
+	time = hours + ":" + minutes + " " + ampm;
 	return time;
 }
 
-function initiateMap(id,latitude,longitude,zoom){
+function initiateMap(id, latitude, longitude, zoom) {
 	var map = L.map(id).setView([latitude, longitude], zoom);
 	map.scrollWheelZoom.disable();
-	map.on("click",function(){
+	map.on("click", function () {
 		map.scrollWheelZoom.enable();
 	});
-	map.on("mouseout",function(){
+	map.on("mouseout", function () {
 		map.scrollWheelZoom.disable();
 	});
 
@@ -306,119 +324,130 @@ function getLocation() {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(showPosition);
 	} else {
-		userMapObj.status="ERROR";
+		userMapObj.status = "ERROR";
 	}
 }
 function showPosition(position) {
-	userMapObj.status="SUCCESS";
-	userMapObj.latitude=position.coords.latitude;
-	userMapObj.longitude=position.coords.longitude;
-	if(enableSync){
-		browser.storage.sync.set({"userMapObj": userMapObj});
+	userMapObj.status = "SUCCESS";
+	userMapObj.latitude = position.coords.latitude;
+	userMapObj.longitude = position.coords.longitude;
+	if (enableSync) {
+		browser.storage.sync.set({ "userMapObj": userMapObj });
 	}
 }
 
-function createMyMessage(message,timeString,msgId){
-	var htmlMsg="<div class='message-container message-container-my' id='myMessage"+msgId+"'> \
+function createMyMessage(message, timeString, msgId) {
+	var htmlMsg = "<div class='message-container message-container-my' id='myMessage" + msgId + "'> \
 	<div class='message-box message-my'> \
-		<div class='message-text'>"+message+"</div> \
-		<div class='message-time'>"+timeString+"</div> \
+		<div class='message-text'>"+ message + "</div> \
+		<div class='message-time'>"+ timeString + "</div> \
 	</div> \
 	</div>";
 	$(htmlMsg).appendTo(messagesHistoryElement);
 	messagesHistory.push(htmlMsg);
-	if(enableSync){
-		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	if (enableSync) {
+		browser.storage.sync.set({ "messagesHistory": messagesHistory });
 	}
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
 	applyTheme();
-	fetchResponse(message,msgId);
+	fetchResponse(message, msgId);
 }
 
 
-function createSusiMessageAnswer(message,timeString,msgId_susi){
-	if(message.match(/.*\.(jpg|png|gif)\b/)){
-		message=message.replace(/.*\.(jpg|png|gif)\b/,function composeImgLink(link){
-			return "<img src='"+link+"'>";
+function createSusiMessageAnswer(message, timeString, msgId_susi) {
+	if (message.match(/.*\.(jpg|png|gif)\b/)) {
+		message = message.replace(/.*\.(jpg|png|gif)\b/, function composeImgLink(link) {
+			return "<img src='" + link + "'>";
 		});
 	}
-	else{
-		message=message.replace(/https?:[/|.|\w]*/gi,function composeLink(link){
-			return "<a href='"+link+"' target='_blank'>"+link+"</a>";
+	else {
+		message = message.replace(/https?:[/|.|\w]*/gi, function composeLink(link) {
+			return "<a href='" + link + "' target='_blank'>" + link + "</a>";
 		});
 	}
 
-	var htmlMsg="<div class='message-box-susi message-susi'> \
-<div class='message-text'>"+message+"</div> \
-<div class='message-time'>"+timeString+"</div> \
+	var htmlMsg = "<div class='message-box-susi message-susi'> \
+<div class='message-text'>"+ message + "</div> \
+<div class='message-time'>"+ timeString + "</div> \
 </div>";
-	$("#susiMessage"+msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
+	$("#susiMessage" + msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
-	messagesHistory.push($("#susiMessage"+msgId_susi).prop("outerHTML"));
-	if(enableSync){
-		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	messagesHistory.push($("#susiMessage" + msgId_susi).prop("outerHTML"));
+	if (enableSync) {
+		browser.storage.sync.set({ "messagesHistory": messagesHistory });
 	}
 }
 
-function createSusiMessageAnchor(text,link,timeString,msgId_susi){
-	var htmlMsg="<div class='message-box-susi message-susi'> \
-<div class='message-text'>"+"<a href='"+link+"' target='_blank'>"+text+"</a>"+"</div> \
-<div class='message-time'>"+timeString+"</div> \
-</div>";
-	$("#susiMessage"+msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
+
+function createSusiMessageVideo(id, website, timeString, msgId_susi) {
+	var htmlMsg = "<iframe class='message-box-susi message-susi' width='350' height='200' src='https://www." + website + ".com/embed/" + id + "?autoplay=1'></iframe>";
+	$("#susiMessage" + msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
-	messagesHistory.push($("#susiMessage"+msgId_susi).prop("outerHTML"));
-	if(enableSync){
-		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	messagesHistory.push($("#susiMessage" + msgId_susi).prop("outerHTML"));
+	if (enableSync) {
+		browser.storage.sync.set({ "messagesHistory": messagesHistory });
 	}
 }
-function createSusiMessageMap(latitude,longitude,zoom,timeString,msgId_susi){
-	var mapid="map"+msgId_susi;
-	var maphtml="<div class='map-div' id='"+mapid+"'></div>";
-	var htmlMsg="<div class='message-box-susi message-susi'> \
-<div class='message-text'>"+maphtml+"</div> \
-<div class='message-time'>"+timeString+"</div> \
+
+function createSusiMessageAnchor(text, link, timeString, msgId_susi) {
+	var htmlMsg = "<div class='message-box-susi message-susi'> \
+<div class='message-text'>"+ "<a href='" + link + "' target='_blank'>" + text + "</a>" + "</div> \
+<div class='message-time'>"+ timeString + "</div> \
 </div>";
-	$("#susiMessage"+msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
+	$("#susiMessage" + msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
-	messagesHistory.push($("#susiMessage"+msgId_susi).prop("outerHTML"));
-	var mapObj={
-		msgId:mapid,
-		latitude:latitude,
-		longitude:longitude,
-		zoom:zoom
+	messagesHistory.push($("#susiMessage" + msgId_susi).prop("outerHTML"));
+	if (enableSync) {
+		browser.storage.sync.set({ "messagesHistory": messagesHistory });
+	}
+}
+function createSusiMessageMap(latitude, longitude, zoom, timeString, msgId_susi) {
+	var mapid = "map" + msgId_susi;
+	var maphtml = "<div class='map-div' id='" + mapid + "'></div>";
+	var htmlMsg = "<div class='message-box-susi message-susi'> \
+<div class='message-text'>"+ maphtml + "</div> \
+<div class='message-time'>"+ timeString + "</div> \
+</div>";
+	$("#susiMessage" + msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
+	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
+	messagesHistory.push($("#susiMessage" + msgId_susi).prop("outerHTML"));
+	var mapObj = {
+		msgId: mapid,
+		latitude: latitude,
+		longitude: longitude,
+		zoom: zoom
 	};
 	userMapObj.mapids.push(mapObj);
-	initiateMap(mapid,latitude,longitude,zoom);
-	if(enableSync){
-		browser.storage.sync.set({"messagesHistory": messagesHistory,"userMapObj":userMapObj});
+	initiateMap(mapid, latitude, longitude, zoom);
+	if (enableSync) {
+		browser.storage.sync.set({ "messagesHistory": messagesHistory, "userMapObj": userMapObj });
 	}
 }
 
-function createSusiMessageTable(tableData,columns,columnsData,timeString,msgId_susi){
+function createSusiMessageTable(tableData, columns, columnsData, timeString, msgId_susi) {
 	var table = "<table><tbody><tr>";
-	var i = 0 ;
-	var j =0 ;
+	var i = 0;
+	var j = 0;
 
 	//create headers for the table
-	for(i = 0 ; i < columnsData.length ; i++){
-		table = table.concat("<th>"+columnsData[i]+"</th>");
+	for (i = 0; i < columnsData.length; i++) {
+		table = table.concat("<th>" + columnsData[i] + "</th>");
 
 	}
-	table =table.concat("</tr>");
+	table = table.concat("</tr>");
 
-	for(i = 0 ; i < tableData.length ; i++){
+	for (i = 0; i < tableData.length; i++) {
 		table = table.concat("<tr>");
 
-		for(j= 0; j < columns.length ;  j++){
+		for (j = 0; j < columns.length; j++) {
 			//check if such column value exists for that record
-			if(tableData[i][columns[j]]){
-				var cellData  = tableData[i][columns[j]];
-				cellData.replace(/https?:[/|.|\w]*/gi,function composeLink(link){
-					cellData="<a href='"+cellData+"' target='_blank'>"+cellData+"</a>";
+			if (tableData[i][columns[j]]) {
+				var cellData = tableData[i][columns[j]];
+				cellData.replace(/https?:[/|.|\w]*/gi, function composeLink(link) {
+					cellData = "<a href='" + cellData + "' target='_blank'>" + cellData + "</a>";
 				});
 
-				table = table.concat("<td>"+cellData + "</td>" );
+				table = table.concat("<td>" + cellData + "</td>");
 			}
 		}
 
@@ -426,67 +455,67 @@ function createSusiMessageTable(tableData,columns,columnsData,timeString,msgId_s
 
 	}
 
-	table =table.concat("</tbody></table>");
+	table = table.concat("</tbody></table>");
 
-	var htmlMsg="<div class='message-box-susi message-susi'> \
-	<div class='table-view'>"+table+"</div> \
-	<div class='message-time'>"+timeString+"</div> \
+	var htmlMsg = "<div class='message-box-susi message-susi'> \
+	<div class='table-view'>"+ table + "</div> \
+	<div class='message-time'>"+ timeString + "</div> \
 	</div>";
 
-	$("#susiMessage"+msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
+	$("#susiMessage" + msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
 	messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
-	messagesHistory.push($("#susiMessage"+msgId_susi).prop("outerHTML"));
+	messagesHistory.push($("#susiMessage" + msgId_susi).prop("outerHTML"));
 
-	if(enableSync){
-		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	if (enableSync) {
+		browser.storage.sync.set({ "messagesHistory": messagesHistory });
 	}
 
 }
 
 
-function createSusiMessageRss(answers,count,currentTimeString,msgId){
-	var rssHtml=$("<div class='content-slick' id=contentSlick"+msgId+"> \
+function createSusiMessageRss(answers, count, currentTimeString, msgId) {
+	var rssHtml = $("<div class='content-slick' id=contentSlick" + msgId + "> \
 	</div> \
 	");
-	rssHtml=rssHtml[0];
-	var i=0;
-	var included=0;
-	while(included!==count && i<answers.length){
-		var answer=answers[i];
-		var title=answer.title?answer.title:"";
-		var description=answer.description?answer.description:"";
-		var link=answer.link?answer.link:"";
-		if(answer.image || (included===0 && i===answers.length-1)) {
+	rssHtml = rssHtml[0];
+	var i = 0;
+	var included = 0;
+	while (included !== count && i < answers.length) {
+		var answer = answers[i];
+		var title = answer.title ? answer.title : "";
+		var description = answer.description ? answer.description : "";
+		var link = answer.link ? answer.link : "";
+		if (answer.image || (included === 0 && i === answers.length - 1)) {
 			included++;
-			var image=answer.image?answer.image:"";
-			$("<a target='_blank' class='anchor' href='"+link+"'><div class='card-slick'> \
-		<img src="+image+" /> \
-		<h4 class='title'>"+title+"</h4> \
-		<p class='description'>"+description+"</p>\
-		<span class='domain'>"+urlDomain(link)+"</span> \
+			var image = answer.image ? answer.image : "";
+			$("<a target='_blank' class='anchor' href='" + link + "'><div class='card-slick'> \
+		<img src="+ image + " /> \
+		<h4 class='title'>"+ title + "</h4> \
+		<p class='description'>"+ description + "</p>\
+		<span class='domain'>"+ urlDomain(link) + "</span> \
 	</div></a>").appendTo(rssHtml);
 		}
 		i++;
 	}
-	var rssContainer = $(rssHtml).appendTo($("#susiMessage"+msgId));
-	messagesHistory.push($("#susiMessage"+msgId).prop("outerHTML"));
-	if(enableSync){
-		browser.storage.sync.set({"messagesHistory": messagesHistory});
+	var rssContainer = $(rssHtml).appendTo($("#susiMessage" + msgId));
+	messagesHistory.push($("#susiMessage" + msgId).prop("outerHTML"));
+	if (enableSync) {
+		browser.storage.sync.set({ "messagesHistory": messagesHistory });
 	}
 	// initialize slick slider
-	$("#contentSlick"+msgId).slick({
-		slidesToShow:1,
-		centerMode:true,
-		centerPadding:"20px",
-		arrows:true,
-		dots:false,
-		infinite:true,
-		dotsClass:"slick-dots slick-dots-ul",
+	$("#contentSlick" + msgId).slick({
+		slidesToShow: 1,
+		centerMode: true,
+		centerPadding: "20px",
+		arrows: true,
+		dots: false,
+		infinite: true,
+		dotsClass: "slick-dots slick-dots-ul",
 
 	});
-	setTimeout(function(){
+	setTimeout(function () {
 		messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;// to apply styles on the dynamic slider
-	},100);
+	}, 100);
 
 }
 
@@ -497,11 +526,11 @@ function urlDomain(data) {
 	return a.hostname;
 }
 
-function showLoading(show,msgId_susi){
-	if(show){
+function showLoading(show, msgId_susi) {
+	if (show) {
 		// create loading with this msgId_susi
 		$(
-			"<div class='message-container message-container-susi' id='susiMessage"+msgId_susi+"'> \
+			"<div class='message-container message-container-susi' id='susiMessage" + msgId_susi + "'> \
       <div class='message-box-susi message-susi'> \
       <div class='message-text'><img src='images/loading.gif' class='loading' /></div> \
       </div> \
@@ -510,21 +539,21 @@ function showLoading(show,msgId_susi){
 		messagesHistoryElement.scrollTop = messagesHistoryElement.scrollHeight;
 		applyTheme();
 	}
-	else{
+	else {
 		// hide loading in this msgId_susi
-		$("#susiMessage"+msgId_susi).empty();
+		$("#susiMessage" + msgId_susi).empty();
 	}
 }
-function fetchResponse(query,msgId) {
-	var msgId_susi=msgId;
-	var latitude=userMapObj.latitude;
-	var longitude=userMapObj.longitude;
-	var url="https://api.susi.ai/susi/chat.json?language=en&timezoneOffset=-300&q=";
-	if(userMapObj.status==="SUCCESS"){
-		url="https://api.susi.ai/susi/chat.json?language=en&latitude="+latitude+"&longitude="+longitude+"&timezoneOffset=-300&q=";
+function fetchResponse(query, msgId) {
+	var msgId_susi = msgId;
+	var latitude = userMapObj.latitude;
+	var longitude = userMapObj.longitude;
+	var url = "https://api.susi.ai/susi/chat.json?language=en&timezoneOffset=-300&q=";
+	if (userMapObj.status === "SUCCESS") {
+		url = "https://api.susi.ai/susi/chat.json?language=en&latitude=" + latitude + "&longitude=" + longitude + "&timezoneOffset=-300&q=";
 	}
-	url = url + query ;
-	if(isLogged){
+	url = url + query;
+	if (isLogged) {
 		url = url + "&access_token=" + accessToken;
 	}
 	showLoading(true, msgId_susi);
@@ -532,96 +561,101 @@ function fetchResponse(query,msgId) {
 		dataType: "jsonp",
 		type: "GET",
 		url: url,
-		error: function(xhr,textStatus,errorThrown) {
-			showLoading(false,msgId_susi);
+		error: function (xhr, textStatus, errorThrown) {
+			showLoading(false, msgId_susi);
 			var response = {
 				error: true,
 				errorText: "Sorry! request could not be made"
 			};
-			var currentTimeString=getCurrentTimeString();
-			createSusiMessageAnswer(response.errorText, currentTimeString,msgId_susi);
+			var currentTimeString = getCurrentTimeString();
+			createSusiMessageAnswer(response.errorText, currentTimeString, msgId_susi);
 			applyTheme();
 		},
 		success: function (data) {
-			showLoading(false,msgId_susi);
-			var currentTimeString=getCurrentTimeString();
-			composeResponse(data,currentTimeString,msgId_susi);
+			showLoading(false, msgId_susi);
+			var currentTimeString = getCurrentTimeString();
+			composeResponse(data, currentTimeString, msgId_susi);
 		}
 	});
 
 }
 
-function composeResponse(data,currentTimeString,msgId_susi){
-	var actions=data.answers[0].actions;
-	var msgId=msgId_susi;
-	for(var action_index = 0;action_index<actions.length;action_index++){
-		var action=actions[action_index];
-		var type=action.type;
-		var answers=[];
-		var count=0;
-		var expression="";
-		if(action_index!==0){
+function composeResponse(data, currentTimeString, msgId_susi) {
+	var actions = data.answers[0].actions;
+	var msgId = msgId_susi;
+	for (var action_index = 0; action_index < actions.length; action_index++) {
+		var action = actions[action_index];
+		var type = action.type;
+		var answers = [];
+		var count = 0;
+		var expression = "";
+		if (action_index !== 0) {
 			messageCount++;
 			msgId++;// create a new message
-			showLoading(true,msgId);
-			showLoading(false,msgId);
+			showLoading(true, msgId);
+			showLoading(false, msgId);
 		}
-		if(type==="answer"){
-			expression=action.expression;
-			if(expression){
-				createSusiMessageAnswer(expression,currentTimeString,msgId);
+		if (type === "answer") {
+			expression = action.expression;
+			if (expression) {
+				createSusiMessageAnswer(expression, currentTimeString, msgId);
 				applyTheme();
 			}
 		}
-		else if(type==="anchor"){
-			var text=action.text;
-			var link=action.link;
-			createSusiMessageAnchor(text,link,currentTimeString,msgId);
+
+		else if (type === "video_play") {
+			createSusiMessageVideo(action.identifier, action.identifier_type, currentTimeString, msgId);
 			applyTheme();
 		}
-		else if(type==="rss"){
-			answers=data.answers[0].data;
+		else if (type === "anchor") {
+			var text = action.text;
+			var link = action.link;
+			createSusiMessageAnchor(text, link, currentTimeString, msgId);
+			applyTheme();
+		}
+		else if (type === "rss") {
+			answers = data.answers[0].data;
 			count = action.count;
-			createSusiMessageRss(answers,count,currentTimeString,msgId);
+			createSusiMessageRss(answers, count, currentTimeString, msgId);
 			applyTheme();
 		}
-		else if(type==="websearch"){
-			answers=data.answers[0].data;
+		else if (type === "websearch") {
+			answers = data.answers[0].data;
 			count = action.count;
-			createSusiMessageRss(answers,count,currentTimeString,msgId);
+			createSusiMessageRss(answers, count, currentTimeString, msgId);
 			applyTheme();
 		}
-		else if(type==="table"){
-			expression="table";
+		else if (type === "table") {
+			expression = "table";
 			var tableData = data.answers[0].data;
 			var columns = Object.keys(action.columns);
 			var columnsData = Object.values(action.columns);
-			createSusiMessageTable(tableData,columns,columnsData,currentTimeString,msgId);
+			createSusiMessageTable(tableData, columns, columnsData, currentTimeString, msgId);
 			applyTheme();
 		}
-		else if(type==="map"){
-			if(userMapObj.status==="SUCCESS"){
-				var latitude=action.latitude;
-				var longitude=action.longitude;
-				var zoom=action.zoom;
-				createSusiMessageMap(latitude,longitude,zoom,currentTimeString,msgId);
+		else if (type === "map") {
+			if (userMapObj.status === "SUCCESS") {
+				var latitude = action.latitude;
+				var longitude = action.longitude;
+				var zoom = action.zoom;
+				createSusiMessageMap(latitude, longitude, zoom, currentTimeString, msgId);
 			}
-			else{
-				createSusiMessageAnswer("Couldn't show map",currentTimeString,msgId);
+			else {
+				createSusiMessageAnswer("Couldn't show map", currentTimeString, msgId);
 			}
 			applyTheme();
 		}
-		else{
+		else {
 			// add support for duckduckgo search
-			expression="unable to fetch";
-			createSusiMessageAnswer(expression,currentTimeString,msgId);
+			expression = "unable to fetch";
+			createSusiMessageAnswer(expression, currentTimeString, msgId);
 			applyTheme();
 		}
 	}
 }
 
-function clearMessageHistory(){
-	
+function clearMessageHistory() {
+
 	//clears messages stored in browser
 	browser.storage.sync.remove("messagesHistory");
 	browser.storage.sync.remove("userMapObj");
@@ -629,6 +663,6 @@ function clearMessageHistory(){
 }
 
 
-setTimeout(function(){
+setTimeout(function () {
 	$("#inputMessage").focus();
-},500);
+}, 500);
