@@ -9,6 +9,8 @@ var messageCount = 0;
 var messagesHistory = [];
 var enableSync = true;// set false for testing purpose
 var theme = "light"; //default
+var topBarColor = "light";
+var messagePaneColor = "light";
 var settings = document.getElementById("settings");
 var seticon = document.getElementById("seticon");
 var userMapObj = { latitude: null, longitude: null, status: null, mapids: [] };
@@ -186,31 +188,16 @@ function restoreMessages() {
 		}
 		//set the theme
 		if (res["theme"]) {
-			if (res["theme"] == "dark") {
-				theme = res["theme"];
-				$(".top-bar").addClass("dark");
-				$(".messages-history").addClass("dark");
-				$(".message-box").addClass("dark");
-				$(".message-box-susi").addClass("dark");
-				$(".input-area").addClass("dark");
-				$(".input-message").addClass("dark");
-				$(".material-icons").addClass("dark");
-				$(".scroll-icon-chevron").addClass("dark");
-				$(".scroll-icon").addClass("dark");
-
-			}
-			else {
-				theme = res["theme"];
-				$(".top-bar").removeClass("dark");
-				$(".messages-history").removeClass("dark");
-				$(".message-box").removeClass("dark");
-				$(".message-box-susi").removeClass("dark");
-				$(".input-area").removeClass("dark");
-				$(".input-message").removeClass("dark");
-				$(".material-icons").removeClass("dark");
-				$("scroll-icon-chevron").removeClass("dark");
-				$("scroll-icon").removeClass("dark");
-			}
+			theme = res["theme"];
+			applyTheme();
+		}
+		if (res["topBarColor"]) {
+			topBarColor = res["topBarColor"];
+			applyTheme();
+		}
+		if (res["messagePaneColor"]) {
+			messagePaneColor = res["messagePaneColor"];
+			applyTheme();
 		}
 		// extract from local memory
 		var bufferLocal = browser.storage.local.get(null);
@@ -233,19 +220,49 @@ function applyTheme() {
 		$(".messages-history").addClass("dark");
 		$(".message-box").addClass("dark");
 		$(".message-box-susi").addClass("dark");
+		$(".message-time").addClass("dark");
 		$(".input-area").addClass("dark");
 		$(".input-message").addClass("dark");
 		$(".material-icons").addClass("dark");
-
 	}
-	else {
+	else if (theme == "light") {
 		$(".top-bar").removeClass("dark");
 		$(".messages-history").removeClass("dark");
 		$(".message-box").removeClass("dark");
 		$(".message-box-susi").removeClass("dark");
+		$(".message-time").removeClass("dark");
 		$(".input-area").removeClass("dark");
 		$(".input-message").removeClass("dark");
 		$(".material-icons").removeClass("dark");
+	}
+	else {
+		if(topBarColor == "dark") {
+			$(".top-bar").addClass("dark");
+			$(".material-icons").addClass("dark");
+		}
+		else {
+			$(".top-bar").removeClass("dark");
+			$(".material-icons").removeClass("dark");
+
+			if(topBarColor != "light") {
+				$(".top-bar").css("backgroundColor", topBarColor);
+				$(".material-icons").css("color", topBarColor);
+			}
+		}
+
+		if (messagePaneColor == "dark") {
+			$(".messages-history").addClass("dark");
+			$(".input-area").addClass("dark");
+		}
+		else {
+			$(".messages-history").removeClass("dark");
+			$(".input-area").removeClass("dark");
+
+			if(messagePaneColor != "light") {
+				$(".messages-history").css("backgroundColor", messagePaneColor);
+				$(".input-area").css("backgroundColor", messagePaneColor);
+			}
+		}
 	}
 }
 
