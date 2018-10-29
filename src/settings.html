@@ -38,13 +38,20 @@
 			<form id="changepasswordform">
 				<h3 class="hr-heading">Change Password?</h3>
 				<hr />
-				<input type="password" id="passwordchange" placeholder="Current Password">
+				<div class="passwordchange">
+					<input type="password" id="passwordchange" placeholder="Current Password">
+				</div>
+				<div class="passwordnew">
+					<input type="password" id="passwordnew" placeholder="New Password">
+				</div>
+				<div style="text-align: center">
+        	<small hidden id="passwordlim">Minimum 6 characters required</small>
+        </div>
+				<div class="passwordnewconfirm">
+					<input type="password" id="passwordnewconfirm" placeholder="Confirm New Password">
+				</div>
 				<br>
-				<input type="password" id="passwordnew" placeholder="New Password">
-				<br>
-				<input type="password" id="passwordnewconfirm" placeholder="Confirm New Password">
-				<br>
-				<button type="submit" id="changepasswordsubmit">Change Password</button>
+				<button disabled type="submit" id="changepasswordsubmit">Change Password</button>
 			</form>
 		</div>
 		<button class="red" id="change-pass-hide-button" style="display: none">Close</button>

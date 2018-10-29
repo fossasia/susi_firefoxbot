@@ -20,6 +20,8 @@ var time = "" ;
 var BASE_URL = "https://api.susi.ai";
 var messagesHistory=[];
 var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
+var passwordLim = document.getElementById("passwordlim");
+var passwordNew = document.getElementById("passwordnew");
 
 themeSelect.addEventListener("change", saveOptions);
 loginForm.addEventListener("submit", login);
@@ -303,7 +305,7 @@ function saveOptions(e) {
 		browser.storage.sync.set({
 			theme: document.querySelector("#theme").value
 		});
-		
+
 		//check if user is logged in
 		if(accessToken!=""){
 
@@ -328,7 +330,7 @@ function saveOptions(e) {
 			});
 
 		}
-		
+
 
 	}
 
@@ -546,3 +548,14 @@ function urlDomain(data) {
 	a.href = data;
 	return a.hostname;
 }
+
+passwordNew.addEventListener("keyup", function () {
+	if(passwordNew.value.length<6){
+		passwordLim.removeAttribute("hidden");
+		document.getElementById("changepasswordsubmit").setAttribute("disabled", "true");
+	}
+	else {
+		passwordLim.setAttribute("hidden", "true");
+		document.getElementById("changepasswordsubmit").removeAttribute("disabled");
+	}
+});
