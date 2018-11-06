@@ -3,7 +3,8 @@ var messageFormElement = document.getElementById("messageForm");
 var inputMessageElement = document.getElementById("inputMessage");
 var messagesHistoryElement = document.getElementById("messagesHistory");
 var loggedEmail = document.getElementById("loggedEmail");
-var scrollIconElement = document.getElementById("scrollIcon");
+var scrollIconBottomElement = document.getElementById("scrollIconBottom");
+var scrollIconTopElement = document.getElementById("scrollIconTop");
 var topBar = document.getElementById("nav");
 var messageCount = 0;
 var messagesHistory = [];
@@ -23,16 +24,18 @@ messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
 });
-function hideScrollButton() {
-	scrollIconElement.style.display = "none";
+function hideScrollBottomButton() {
+	scrollIconBottomElement.style.display = "none";
+	scrollIconTopElement.style.display = "block";
 }
-function showScrollButton() {
-	scrollIconElement.style.display = "block";
+function showScrollBottomButton() {
+	scrollIconTopElement.style.display = "none";
+	scrollIconBottomElement.style.display = "block";
 }
 clearchat.addEventListener("click", clearMessageHistory);
 
 //hide scroll button by default
-hideScrollButton();
+hideScrollBottomButton();
 // initialization based on cache status
 var buffer = browser.storage.sync.get(null);
 buffer.then(function (res) {
@@ -77,23 +80,30 @@ seticon.addEventListener("mouseout", function () {
 	seticon.src = "images/settings.svg";
 });
 
+scrollIconTopElement.addEventListener("click", function (e) {
+	$(messagesHistoryElement).stop().animate({
+		scrollTop: 0
+	}, 800);
+	e.preventDefault();
+});
 
-scrollIconElement.addEventListener("click", function (e) {
+scrollIconBottomElement.addEventListener("click", function (e) {
 	$(messagesHistoryElement).stop().animate({
 		scrollTop: $(messagesHistoryElement)[0].scrollHeight
 	}, 800);
 	e.preventDefault();
 });
+
 function handleScroll() {
-	var scrollIcon = scrollIconElement;
-	var end = messagesHistoryElement.scrollHeight - messagesHistoryElement.scrollTop === messagesHistoryElement.clientHeight;
+	var scrollIcon = scrollIconBottomElement;
+	var end = messagesHistoryElement.scrollHeight - messagesHistoryElement.scrollTop <= messagesHistoryElement.clientHeight;
 	if (end) {
 		//hide icon
-		hideScrollButton();
+		hideScrollBottomButton();
 	}
 	else {
 		//show icon
-		showScrollButton();
+		showScrollBottomButton();
 	}
 	// retrive history on scrolling
 	if (messagesHistoryElement.scrollTop == 0) {
