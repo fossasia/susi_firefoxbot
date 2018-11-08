@@ -16,6 +16,8 @@ var settings = document.getElementById("settings");
 var seticon = document.getElementById("seticon");
 var userMapObj = { latitude: null, longitude: null, status: null, mapids: [] };
 var clearchat = document.getElementById("clearchathistory");
+var login = document.getElementById("loggedIn");
+var logout = document.getElementById("loggedOut");
 var numberOfMessagesToLoad = 15;
 var isLogged = false;
 var accessToken = "";
@@ -47,6 +49,8 @@ buffer.then(function (res) {
 		loggedEmail.innerText = res["loggedUser"].email;
 		isLogged = true;
 		accessToken = res["loggedUser"].accessToken;
+		document.getElementById("loggedIn").style.display = "none";
+		document.getElementById("loggedOut").style.display = "block";
 
 	}
 	else {
@@ -54,6 +58,9 @@ buffer.then(function (res) {
 		messagesHistoryElement.style.height = "75%";
 		loggedEmail.style.display = "none";
 		loggedEmail.innerText = "";
+		document.getElementById("loggedIn").style.display = "block";
+		document.getElementById("loggedOut").style.display = "none";
+
 	}
 
 });
@@ -71,8 +78,20 @@ settings.addEventListener("click", function () {
 	browser.runtime.openOptionsPage();
 });
 
-seticon.addEventListener("mouseover", function () {
+logout.addEventListener("click", function () {
+	browser.storage.sync.remove("messagesHistory");
+	browser.storage.sync.remove("userMapObj");
+	browser.storage.sync.remove("loggedUser");
+	accessToken = "";
+	document.getElementById("loggedIn").style.display = "block";
+	document.getElementById("loggedOut").style.display = "none";
+});
 
+login.addEventListener("click", function () {
+	browser.runtime.openOptionsPage();
+});
+
+seticon.addEventListener("mouseover", function () {
 	seticon.src = "images/settings-hover.svg";
 });
 seticon.addEventListener("mouseout", function () {
@@ -387,6 +406,7 @@ function createSusiMessageAnswer(message, timeString, msgId_susi) {
 	}
 }
 
+
 function createSusiMessageVideo(id, website, timeString, msgId_susi) {
 	var htmlMsg = "<iframe class='message-box-susi message-susi' width='350' height='200' src='https://www." + website + ".com/embed/" + id + "?autoplay=1'></iframe>";
 	$("#susiMessage" + msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
@@ -610,6 +630,7 @@ function composeResponse(data, currentTimeString, msgId_susi) {
 				applyTheme();
 			}
 		}
+
 		else if (type === "video_play") {
 			createSusiMessageVideo(action.identifier, action.identifier_type, currentTimeString, msgId);
 			applyTheme();
