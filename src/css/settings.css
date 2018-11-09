@@ -79,3 +79,7 @@ hr{
 .hide{
     display: none;
 }
+#toggle{
+    color: #4285f4;
+    font-size: 23px;
+} 
