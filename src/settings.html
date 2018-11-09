@@ -38,13 +38,20 @@
 			<form id="changepasswordform">
 				<h3 class="hr-heading">Change Password?</h3>
 				<hr />
-				<input type="password" id="passwordchange" placeholder="Current Password">
+				<div class="passwordchange">
+					<input type="password" id="passwordchange" placeholder="Current Password">
+				</div>
+				<div class="passwordnew">
+					<input type="password" id="passwordnew" placeholder="New Password">
+				</div>
+				<div style="text-align: center">
+        	<small hidden id="passwordlim">Minimum 6 characters required</small>
+        </div>
+				<div class="passwordnewconfirm">
+					<input type="password" id="passwordnewconfirm" placeholder="Confirm New Password">
+				</div>
 				<br>
-				<input type="password" id="passwordnew" placeholder="New Password">
-				<br>
-				<input type="password" id="passwordnewconfirm" placeholder="Confirm New Password">
-				<br>
-				<button type="submit" id="changepasswordsubmit">Change Password</button>
+				<button disabled type="submit" id="changepasswordsubmit">Change Password</button>
 			</form>
 		</div>
 		<button class="red" id="change-pass-hide-button" style="display: none">Close</button>
@@ -57,6 +64,33 @@
 	<select id="theme" name="theme">
 		<option value="light">Light</option>
 		<option value="dark">Dark</option>
+		<option value="custom">Custom</option>
+	</select>
+	<h4>Top Bar Color</h4>
+	<select id="top-bar-color" name="top-bar-color">
+		<option value="light">Light</option>
+		<option value="dark">Dark</option>
+
+		<option disabled></option>
+		
+		<option value="red">Red</option>
+		<option value="blue">Blue</option>
+		<option value="black">Black</option>
+		<option value="brown">Brown</option>
+		<option value="green">Green</option>
+	</select>
+	<h4>Message Pane Color</h4>
+	<select id="message-pane-color" name="message-pane-color">
+		<option value="light">Light</option>
+		<option value="dark">Dark</option>
+
+		<option disabled></option>
+		
+		<option value="red">Red</option>
+		<option value="blue">Blue</option>
+		<option value="black">Black</option>
+		<option value="brown">Brown</option>
+		<option value="green">Green</option>
 	</select>
 	<br>
 	<button class="clear-history-button" id="clearMessageHistory">Clear Message History</button>
