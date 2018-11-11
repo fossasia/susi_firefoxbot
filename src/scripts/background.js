@@ -1,8 +1,13 @@
 
-// add a context Menu
+// add context Menus
 browser.contextMenus.create({
 	id: "search-selection",
 	"title" : "Ask SUSI - \""+"%s"+"\"",
+	contexts: ["selection"]
+}, onCreated);
+browser.contextMenus.create({
+	id: "location-search-selection",
+	"title" : "Find on SUSI - \""+"%s"+"\"",
 	contexts: ["selection"]
 }, onCreated);
 
@@ -13,6 +18,7 @@ function onCreated(){
 browser.contextMenus.onClicked.addListener(function(info, tab) {
 	switch (info.menuItemId) {
 	case "search-selection":
+	{
 		var txt = info.selectionText;
 		browser.storage.local.set({
 			"contextQuery":txt
@@ -20,5 +26,15 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
 		//supports only firefox 57
 		browser.browserAction.openPopup();
 		break;
+	}
+	case "location-search-selection":
+	{
+		txt = info.selectionText;
+		browser.storage.local.set({
+			"contextQuery":"Where is " + txt
+		});
+		browser.browserAction.openPopup();
+		break;
+	}
 	}
 });
