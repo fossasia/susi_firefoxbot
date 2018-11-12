@@ -354,7 +354,7 @@ function saveOptions(e) {
 
 		//check if user is logged in
 		if (accessToken != "") {
-			var topBarUrl = BASE_URL + "/aaa/changeUserSettings.json?key1=topBarColor&value1=" + selectedTopBarColor + 
+			var topBarUrl = BASE_URL + "/aaa/changeUserSettings.json?key1=topBarColor&value1=" + selectedTopBarColor +
 				"&access_token=" + accessToken + "&count=1";
 
 			// fire the api call to change settings value on server
@@ -623,7 +623,7 @@ passwordNew.addEventListener("keyup", function () {
 toggle.addEventListener("click", function () {
 	toggle.classList.toggle("fa-eye");
 	toggle.classList.toggle("fa-eye-slash");
-	if (toggle.classList.contains("fa-eye")) {
+	if (toggle.classList.contains("fa-eye-slash")) {
 		pass.type = "password";
 	}
 	else {
