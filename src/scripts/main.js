@@ -6,6 +6,8 @@ var loggedEmail = document.getElementById("loggedEmail");
 var scrollIconBottomElement = document.getElementById("scrollIconBottom");
 var scrollIconTopElement = document.getElementById("scrollIconTop");
 var topBar = document.getElementById("nav");
+var login = document.getElementById("loggedIn");
+var logout = document.getElementById("loggedOut");
 var messageCount = 0;
 var messagesHistory = [];
 var enableSync = true;// set false for testing purpose
@@ -16,12 +18,22 @@ var settings = document.getElementById("settings");
 var seticon = document.getElementById("seticon");
 var userMapObj = { latitude: null, longitude: null, status: null, mapids: [] };
 var clearchat = document.getElementById("clearchathistory");
-var login = document.getElementById("loggedIn");
-var logout = document.getElementById("loggedOut");
 var numberOfMessagesToLoad = 15;
 var isLogged = false;
 var accessToken = "";
 var emptyHistory = true;
+login.addEventListener("click", function () {
+	browser.runtime.openOptionsPage();
+});
+
+logout.addEventListener("click", function () {
+	browser.storage.sync.remove("loggedUser");
+	document.getElementById("loggedOut").style.display = "none";
+    browser.storage.sync.remove("messagesHistory");
+	browser.storage.sync.remove("userMapObj");
+	browser.storage.sync.remove("loggedUser");
+	document.getElementById("loggedIn").style.display = "block";
+});
 messageFormElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 	handleMessageInputSubmit();
@@ -52,6 +64,7 @@ buffer.then(function (res) {
 		document.getElementById("loggedIn").style.display = "none";
 		document.getElementById("loggedOut").style.display = "block";
 
+
 	}
 	else {
 		topBar.style.height = "12%";
@@ -60,7 +73,6 @@ buffer.then(function (res) {
 		loggedEmail.innerText = "";
 		document.getElementById("loggedIn").style.display = "block";
 		document.getElementById("loggedOut").style.display = "none";
-
 	}
 
 });
@@ -78,20 +90,8 @@ settings.addEventListener("click", function () {
 	browser.runtime.openOptionsPage();
 });
 
-logout.addEventListener("click", function () {
-	browser.storage.sync.remove("messagesHistory");
-	browser.storage.sync.remove("userMapObj");
-	browser.storage.sync.remove("loggedUser");
-	accessToken = "";
-	document.getElementById("loggedIn").style.display = "block";
-	document.getElementById("loggedOut").style.display = "none";
-});
-
-login.addEventListener("click", function () {
-	browser.runtime.openOptionsPage();
-});
-
 seticon.addEventListener("mouseover", function () {
+
 	seticon.src = "images/settings-hover.svg";
 });
 seticon.addEventListener("mouseout", function () {
@@ -406,7 +406,6 @@ function createSusiMessageAnswer(message, timeString, msgId_susi) {
 	}
 }
 
-
 function createSusiMessageVideo(id, website, timeString, msgId_susi) {
 	var htmlMsg = "<iframe class='message-box-susi message-susi' width='350' height='200' src='https://www." + website + ".com/embed/" + id + "?autoplay=1'></iframe>";
 	$("#susiMessage" + msgId_susi).html(htmlMsg).appendTo(messagesHistoryElement);
@@ -630,7 +629,6 @@ function composeResponse(data, currentTimeString, msgId_susi) {
 				applyTheme();
 			}
 		}
-
 		else if (type === "video_play") {
 			createSusiMessageVideo(action.identifier, action.identifier_type, currentTimeString, msgId);
 			applyTheme();
