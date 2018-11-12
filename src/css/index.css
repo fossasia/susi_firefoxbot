@@ -38,7 +38,10 @@ body{
 
 .container{
   width: 320px;
-  height: 450px;
+  height: 480px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .dark{
@@ -51,7 +54,7 @@ body{
 
 .top-bar{
   background-color: #4285f4;
-  height: 12%;
+  height: auto;
   padding-bottom: 10px;
 }
 .logged-info{
@@ -135,8 +138,8 @@ body{
 /*Message section*/
 .messages-history{
   background-color: #f5f4f6;
-  height: 75%;
-  overflow-y: scroll;
+  flex: 1;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
