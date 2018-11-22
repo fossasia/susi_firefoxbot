@@ -24,6 +24,8 @@ var messagesHistory=[];
 var userMapObj={latitude:null,longitude:null,status:null,mapids:[]};
 var passwordLim = document.getElementById("passwordlim");
 var passwordNew = document.getElementById("passwordnew");
+var toggle = document.getElementById("toggle");
+var pass = document.getElementById("password");
 
 themeSelect.addEventListener("change", saveOptions);
 topBarColorSelect.addEventListener("change", saveOptions);
@@ -352,7 +354,7 @@ function saveOptions(e) {
 
 		//check if user is logged in
 		if (accessToken != "") {
-			var topBarUrl = BASE_URL + "/aaa/changeUserSettings.json?key1=topBarColor&value1=" + selectedTopBarColor + 
+			var topBarUrl = BASE_URL + "/aaa/changeUserSettings.json?key1=topBarColor&value1=" + selectedTopBarColor +
 				"&access_token=" + accessToken + "&count=1";
 
 			// fire the api call to change settings value on server
@@ -615,5 +617,16 @@ passwordNew.addEventListener("keyup", function () {
 	else {
 		passwordLim.setAttribute("hidden", "true");
 		document.getElementById("changepasswordsubmit").removeAttribute("disabled");
+	}
+});
+
+toggle.addEventListener("click", function () {
+	toggle.classList.toggle("fa-eye");
+	toggle.classList.toggle("fa-eye-slash");
+	if (toggle.classList.contains("fa-eye-slash")) {
+		pass.type = "password";
+	}
+	else {
+		pass.type = "text";
 	}
 });
