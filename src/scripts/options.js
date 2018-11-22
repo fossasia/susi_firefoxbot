@@ -320,7 +320,15 @@ function saveOptions(e) {
 			theme: selectedtheme
 		});
 
-		if(selectedtheme !== "custom"){
+		if(selectedtheme === "light"){
+			document.querySelector("#top-bar-color").value = "light";
+			document.querySelector("#message-pane-color").value = "light";
+			topBarColorSelect.disabled = true;
+			messagePaneColorSelect.disabled = true;
+		}
+		else if(selectedtheme === "dark"){
+			document.querySelector("#top-bar-color").value = "dark";
+			document.querySelector("#message-pane-color").value = "dark";
 			topBarColorSelect.disabled = true;
 			messagePaneColorSelect.disabled = true;
 		}
