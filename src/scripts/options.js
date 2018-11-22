@@ -26,6 +26,7 @@ var passwordLim = document.getElementById("passwordlim");
 var passwordNew = document.getElementById("passwordnew");
 var toggle = document.getElementById("toggle");
 var pass = document.getElementById("password");
+var mail = document.getElementById("username");
 
 themeSelect.addEventListener("change", saveOptions);
 topBarColorSelect.addEventListener("change", saveOptions);
@@ -628,5 +629,18 @@ toggle.addEventListener("click", function () {
 	}
 	else {
 		pass.type = "text";
+	}
+});
+
+mail.addEventListener("keyup", function () {
+	var email=mail.value;
+	var isEmailValid = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+	if(!isEmailValid){
+		document.getElementById("emailWarning").style.display="block";
+		return;
+	}
+	else{
+		document.getElementById("emailWarning").style.display="none";
+		return;
 	}
 });
