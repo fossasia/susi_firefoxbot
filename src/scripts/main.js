@@ -29,7 +29,7 @@ login.addEventListener("click", function () {
 logout.addEventListener("click", function () {
 	browser.storage.sync.remove("loggedUser");
 	document.getElementById("loggedOut").style.display = "none";
-    browser.storage.sync.remove("messagesHistory");
+        browser.storage.sync.remove("messagesHistory");
 	browser.storage.sync.remove("userMapObj");
 	browser.storage.sync.remove("loggedUser");
 	document.getElementById("loggedIn").style.display = "block";
