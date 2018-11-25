@@ -70,6 +70,16 @@ button{
     background-color: #d9534f;
 }
 
+.password-form {
+  position: relative;
+}
+
+.form-group {
+  position: absolute;
+  top: 19px;
+  left: 204px;
+}
+
 hr{
     width:100%;
 }
@@ -82,4 +92,4 @@ hr{
 #toggle{
     color: #4285f4;
     font-size: 23px;
-} 
+}
