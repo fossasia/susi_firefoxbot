@@ -695,11 +695,20 @@ setTimeout(function () {
 	$("#inputMessage").focus();
 }, 500);
 
-function toggletheme() {
-	var toggle = document.getElementById("check");
-	if (toggle.checked == true) {
-		browser.storage.sync.set({ theme: "dark" });
+var toggle = document.getElementById("check");
+
+toggle.addEventListener('click', toggle_theme, false);
+
+function toggle_theme() {
+	if (toggle.checked) {
+		console.log("unchecked");
+    	browser.storage.sync.set({ theme: "dark" });
+    	theme = "dark";
+    applyTheme();
 	} else {
+		console.log("checked");
 		browser.storage.sync.set({ theme: "light" });
+		theme = "light";
+		applyTheme();
 	}
 }
