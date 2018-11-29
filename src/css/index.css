@@ -532,7 +532,7 @@ input:checked + .slider:before {
   background-color: #f9f9f9;
   min-width: 150px;
   box-shadow: 0px 8px 16px 0px rgb(0,0,0,0.2);
-  padding: 12px 0;
+  padding: 0px;
   z-index: 5;
   color: grey;
   list-style: none;
@@ -555,12 +555,14 @@ input:checked + .slider:before {
   justify-content: space-between;
   margin: 5px 0;
   padding: 0 16px;
+  color: #887c7c;
 }
 .dropdown-content a li img {
   height: 30px;
 }
 .dropdown-content a{
-  color: #676767;
+  color: #887c7c;
+  text-decoration: none;
 }
 .dropdown-content a:hover{
   background-color: #e5e5e5;
