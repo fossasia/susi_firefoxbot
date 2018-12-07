@@ -611,7 +611,7 @@ function urlDomain(data) {
 }
 
 passwordNew.addEventListener("keyup", function () {
-	if(passwordNew.value.length<6){
+	if(passwordNew.value.length<6 || passwordNew.value.length>64){
 		passwordLim.removeAttribute("hidden");
 		document.getElementById("changepasswordsubmit").setAttribute("disabled", "true");
 	}
