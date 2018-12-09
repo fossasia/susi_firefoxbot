@@ -2,52 +2,60 @@
 <html>
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" />
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
 	 crossorigin="" />
 	<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
 	 crossorigin=""></script>
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.3/css/bulma.min.css" />
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick-theme.css" />
-	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
 </head>
 
 <body>
 	<div class="container">
 		<div class="top-bar" id="nav">
 			<a href="https://susi.ai/">
-				<img class="logo" src="images/susi_logo_white.png">
+				<img class="logo" src="images/susi_logo_white.png" />
 			</a>
+			<div class="theme">
+				<label class="switch">
+					<input hidden type="checkbox" id="check">
+					<span class="slider round"></span>
+				</label>
+			</div>
 			<div style="z-index: 2;" class="dropdown">
-				<div id="dropdown"><img id="seticon" src="images/settings.svg" style="width: auto; height: 30px;"></div>
+				<div id="dropdown">
+					<img id="seticon" src="images/settings.svg" style="width: auto; height: 30px;" />
+				</div>
+
 				<div class="dropdown-content">
 					<a href="https://chat.susi.ai/overview" target="_blank">
-						<li>About<img src="images/about.svg"></li>
+						<li>About<img src="images/about.svg" /></li>
 					</a>
 					<a href="https://chat.susi.ai/" target="_blank">
-						<li>Chat<img src="images/chat.svg"></li>
+						<li>Chat<img src="images/chat.svg" /></li>
 					</a>
 					<a href="https://skills.susi.ai/" target="_blank">
-						<li>Skills<img src="images/skills.svg"></li>
+						<li>Skills<img src="images/skills.svg" /></li>
 					</a>
 					<a href="" id="settings">
-						<li>Settings<img src="images/skills.svg"></li>
+						<li>Settings<img src="images/skills.svg" /></li>
 					</a>
 
 					<a href="" id="clearchathistory">
-						<li>Clear Chat<img src="images/clearAll.svg"></li>
+						<li>Clear Chat<img src="images/clearAll.svg" /></li>
 					</a>
 					<a href="" id="loggedIn">
-						<li>Login<img src="images/skills.svg"></li>
-
+						<li>Login<img src="images/skills.svg" /></li>
 					</a>
 					<a href="" id="loggedOut">
-						<li>Logout<img src="images/skills.svg"></li>
-
+						<li>Logout<img src="images/skills.svg" /></li>
 					</a>
 				</div>
 			</div>
@@ -56,31 +64,29 @@
 			</div>
 		</div>
 		<section class="messages-history" id="messagesHistory">
-
 			<!-- Dynamically populated -->
 		</section>
-
-		<span style="z-index: 1;" class="scroll-icon-top" id="scrollIconTop">
-				<svg viewBox="0 0 24 24" style="display: inline-block; height: 30px; width: 24px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms; line-height: 40px;"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"></path></svg>
+		<span class="scroll-icon" id="scrollIconTop">
+			<svg class="scroll-icon-chevron" viewBox="0 0 24 24">
+				<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+			</svg>
 		</span>
 
 		<span style="z-index: 1;" class="scroll-icon-bottom" id="scrollIconBottom">
-				<svg viewBox="0 0 24 24" style="display: inline-block; height: 30px; width: 24px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms; line-height: 40px;"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></svg>
+			<svg viewBox="0 0 24 24" style="display: inline-block; height: 30px; width: 24px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms; line-height: 40px;">
+				<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+			</svg>
 		</span>
-
 
 		<section class="input-area">
 			<form id="messageForm">
 				<input class="input-message" id="inputMessage" name="text" autofocus="true" type="text" placeholder="Type your message..." />
-				<button type="submit" class="input-button" id="inputSubmit" name="submit"><i class="material-icons">&#xE163;</i></button>
+				<button type="submit" class="input-button" id="inputSubmit" name="submit">
+					<i class="material-icons">&#xE163;</i>
+				</button>
 			</form>
 		</section>
 	</div>
-	<script type="text/javascript">
-
-
-
-	</script>
 	<script src="scripts/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.0/slick/slick.min.js"></script>
 	<script src="scripts/main.js"></script>

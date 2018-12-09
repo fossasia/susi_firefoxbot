@@ -281,6 +281,54 @@ body{
   width: auto;
   margin: 13px 0;
 }
+/* Slider Settings*/
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 3%;
+  left: 8%;
+  right: 80%;
+  bottom: 92.5%;
+  background-color: #14224a;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 1px;
+  bottom: 1px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(16px);
+}
+
+/* Rounded sliders */
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
 /* Slick settings */
 .content-slick{
   height: 270px;

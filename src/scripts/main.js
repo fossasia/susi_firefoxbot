@@ -694,3 +694,20 @@ function clearMessageHistory() {
 setTimeout(function () {
 	$("#inputMessage").focus();
 }, 500);
+
+var toggle = document.getElementById("check");
+
+toggle.addEventListener("click", toggle_theme, false);
+
+function toggle_theme() {
+	if (toggle.checked) {
+		browser.storage.sync.set({ theme: "dark" });
+		theme = "dark";
+		applyTheme();
+	} 
+	else {
+		browser.storage.sync.set({ theme: "light" });
+		theme = "light";
+		applyTheme();
+	}
+}
