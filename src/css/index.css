@@ -573,3 +573,7 @@ input:checked + .slider:before {
   height: 40%;
   overflow: auto;
 }
+
+.greyscale {
+  opacity: 0.6;
+}
