@@ -78,9 +78,8 @@ button{
 }
 
 .form-group {
-  position: absolute;
   top: 19px;
-  left: 190px;
+  margin-left: -35px;
 }
 
 hr{
