@@ -50,6 +50,9 @@ input[type=text], input[type=password], input[type=email] {
     font-size: 16px;
     border-radius: 2px;
 }
+.password-form>input {
+    padding-right: 3rem;
+}
 
 button{
     text-align: center;
