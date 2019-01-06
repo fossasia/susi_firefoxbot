@@ -46,7 +46,7 @@ input[type=text], input[type=password], input[type=email] {
     padding: 14px;
     text-decoration: none;
     margin: 4px 2px;
-    cursor: pointer;
+    cursor: text;
     font-size: 16px;
     border-radius: 2px;
 }
