@@ -102,7 +102,6 @@ function showChangePassForm() {
 	showChangePassButton.style.display = "none";
 	changePassContainer.style.display = "block";
 	hideChangePassButton.style.display = "block";
-
 }
 
 function hideChangePassForm() {
@@ -190,6 +189,19 @@ function login(event) {
 	});
 
 }
+
+var changepasswordsubmitButton = document.getElementById("changepasswordsubmit");
+var password = document.getElementById("passwordchange").value;
+var newpassword = document.getElementById("passwordnew").value;
+var passwordnewconfirm = document.getElementById("passwordnewconfirm").value;
+
+
+if(password > 0 && newpassword > 0 && passwordnewconfirm > 0) {
+	changepasswordsubmitButton.disabled = false;
+}else{
+	changepasswordsubmitButton.disabled = true;
+}
+
 function handleChangePassword(event) {
 	event.preventDefault();
 	var changepasswordsubmitButton = document.getElementById("changepasswordsubmit");
