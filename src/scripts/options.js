@@ -30,7 +30,10 @@ var mail = document.getElementById("username");
 var forgotaccount = document.getElementById("forgot");
 var resetaccount = document.getElementById("resetaccount");
 var resetaccountcancel = document.getElementById("resetaccountcancel");
-
+var changepasswordsubmitButton = document.getElementById("changepasswordsubmit");
+var password = document.getElementById("passwordchange").value;
+var newpassword = document.getElementById("passwordnew").value;
+var passwordnewconfirm = document.getElementById("passwordnewconfirm").value;
 
 themeSelect.addEventListener("change", saveOptions);
 topBarColorSelect.addEventListener("change", saveOptions);
@@ -189,12 +192,6 @@ function login(event) {
 	});
 
 }
-
-var changepasswordsubmitButton = document.getElementById("changepasswordsubmit");
-var password = document.getElementById("passwordchange").value;
-var newpassword = document.getElementById("passwordnew").value;
-var passwordnewconfirm = document.getElementById("passwordnewconfirm").value;
-
 
 if(password > 0 && newpassword > 0 && passwordnewconfirm > 0) {
 	changepasswordsubmitButton.disabled = false;
